@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myMAPÚA - Manage Section</title>
+  <link rel="stylesheet" href="../css/portal-theme.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Tahoma, Helvetica, sans-serif;
+      background-color: #ffffff;
+    }
+
+    .manage-section-page {
+      padding: 12px 18px;
+      font-size: 11px;
+      color: #000000;
+      background-color: #ffffff;
+      flex: 1 1 auto;
+    }
+
+    /* Title bar */
+    .section-title-strip {
+      background-color: #f7faeb;
+      border: 1px solid #000000;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #000000;
+      margin-bottom: 14px;
+    }
+
+    /* Outer split container */
+    .section-flex-container {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    /* Left pane containing course table and calendar */
+    .section-left-pane {
+      width: 540px;
+      min-width: 540px;
+      max-width: 540px;
+    }
+
+    /* Right pane for available sections */
+    .section-right-pane {
+      width: 290px;
+      min-width: 290px;
+      max-width: 290px;
+      padding-top: 2px;
+    }
+
+    /* ================= 1. Course Table ================= */
+    .table-manage-sec {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #000000; /* Black border */
+      background-color: #ffffff;
+      margin-bottom: 6px;
+      table-layout: fixed;
+    }
+
+    .table-manage-sec th {
+      background-color: #cc1b1b;
+      color: #ffffff;
+      border: 1px solid #000000; /* Black border */
+      padding: 7px 6px;
+      font-size: 10.5px;
+      font-weight: bold;
+      text-align: center;
+      vertical-align: middle;
+      line-height: 1.2;
+    }
+
+    .table-manage-sec td {
+      border: 1px solid #000000; /* Black border */
+      padding: 8px 6px;
+      font-size: 10px;
+      background-color: #ffffff;
+      color: #000000;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .table-manage-sec tr:nth-child(even) td {
+      background-color: #f6f8fb;
+    }
+
+    .table-manage-sec tr.clickable-row {
+      cursor: pointer;
+    }
+
+    .table-manage-sec tr.row-selected td {
+      background-color: #e4e69d !important;
+    }
+
+    /* Requirement 1: Total Units in the middle */
+    .table-manage-sec tfoot td {
+      background-color: #ffffff;
+      border: 1px solid #000000; /* Black border */
+      padding: 7px 6px;
+      font-size: 10.5px;
+      font-weight: bold;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    /* Red square remove button */
+    .red-square-btn {
+      background-color: #cc1b1b;
+      border: 1px solid #000000;
+      width: 20px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 2px;
+      padding: 0;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 1;
+    }
+    .red-square-btn:hover {
+      background-color: #aa1212;
+    }
+
+    /* Legend strip */
+    .sec-legend-line {
+      font-size: 10px;
+      margin-top: 6px;
+      margin-bottom: 6px;
+      color: #000000;
+    }
+
+    /* Pill Badges */
+    .pills-group {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .pill-item {
+      padding: 3px 9px;
+      font-size: 10px;
+      border-radius: 3px;
+      display: inline-block;
+      text-align: center;
+      user-select: none;
+      cursor: default;
+    }
+    .pill-green {
+      background-color: #5da742;
+      color: #ffffff;
+      border: 1px solid #000000;
+    }
+    .pill-yellow {
+      background-color: #f7ca4d;
+      color: #000000;
+      border: 1px solid #000000;
+    }
+    .pill-red {
+      background-color: #cc1b1b;
+      color: #ffffff;
+      border: 1px solid #000000;
+    }
+    .pill-blue {
+      background-color: #2b74c2;
+      color: #ffffff;
+      border: 1px solid #000000;
+    }
+
+    /* ================= 2. Weekly Timetable Grid ================= */
+    .grid-timetable {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #000000; /* Black border */
+      background-color: #ffffff;
+      font-size: 9.5px;
+      table-layout: fixed;
+    }
+
+    .grid-timetable th {
+      background-color: #cc1b1b;
+      color: #ffffff;
+      border: 1px solid #000000; /* Black border */
+      padding: 6px 3px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 10px;
+    }
+
+    /* Requirement 6: Bigger cells */
+    .grid-timetable td {
+      border: 1px solid #000000; /* Black border */
+      height: 36px; /* Bigger calendar cells */
+      padding: 0 !important;
+      vertical-align: middle;
+      text-align: center;
+      background-color: #ffffff;
+    }
+
+    .grid-timetable td.time-cell {
+      background-color: #ffffff;
+      font-size: 8.5px;
+      white-space: nowrap;
+      padding: 3px 4px !important;
+      color: #000000;
+      line-height: 1.25;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    /* Requirement 6: Remove border of colored schedule blocks */
+    .full-cell-slot {
+      width: 100%;
+      height: 100%;
+      min-height: 36px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      line-height: 1.2;
+      border: none !important; /* No border */
+    }
+
+    /* Existing Schedule (Green) */
+    .slot-existing {
+      background-color: #72b849;
+      color: #000000;
+    }
+
+    /* Requirement 4: Selected Schedule (Yellow) */
+    .slot-selected {
+      background-color: #f7ca4d;
+      color: #000000;
+    }
+
+    /* Requirement 5: Conflict Schedule (Red) */
+    .slot-conflict {
+      background-color: #cc1b1b;
+      color: #ffffff;
+    }
+
+    /* ================= 3. Available Sections Table (Side Panel) ================= */
+    .table-avail-sections {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #000000; /* Black border */
+      background-color: #ffffff;
+      font-size: 9.5px;
+    }
+
+    .table-avail-sections thead tr:first-child th {
+      background-color: #d6d9df;
+      color: #000000;
+      border: 1px solid #000000; /* Black border */
+      text-align: right;
+      padding: 5px 6px;
+      font-size: 10.5px;
+      font-weight: bold;
+    }
+
+    .table-avail-sections thead tr:nth-child(2) th {
+      background-color: #d6d9df;
+      color: #000000;
+      border: 1px solid #000000; /* Black border */
+      text-align: center;
+      padding: 5px 3px;
+      font-size: 9.5px;
+      font-weight: bold;
+    }
+
+    .table-avail-sections td {
+      border: 1px solid #000000; /* Black border */
+      padding: 6px 4px;
+      text-align: center;
+      vertical-align: middle;
+      background-color: #ffffff;
+      color: #000000;
+      line-height: 1.25;
+    }
+
+    /* Bundled section hover & active highlight */
+    .table-avail-sections tbody tr.bundle-row {
+      cursor: pointer;
+    }
+    .table-avail-sections tbody tr.bundle-row:hover td,
+    .table-avail-sections tbody tr.bundle-hovered td {
+      background-color: #fff6cc;
+    }
+    .table-avail-sections tbody tr.bundle-active td {
+      background-color: #fef0a8 !important;
+    }
+
+    /* Requirement 7: Add button with + sign */
+    .btn-add-section {
+      background-color: #cc1b1b;
+      color: #ffffff;
+      border: 1px solid #000000;
+      width: 22px;
+      height: 20px;
+      border-radius: 2px;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-add-section:hover {
+      background-color: #aa1212;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Banner -->
+  <header class="top-banner">
+    <div class="banner-inner">
+      <div class="logo-box">
+        <img 
+          src="../assets/mapua-logo-portal.png" 
+          alt="Mapúa Builder" 
+          class="builder-graphic" 
+          onerror="this.style.display='none'; document.getElementById('builder-fallback').style.display='flex';" 
+        />
+        <div id="builder-fallback" class="builder-fallback-slot">Logo</div>
+      </div>
+    </div>
+    <div class="gold-line"></div>
+  </header>
+
+  <!-- Shell Wrapper -->
+  <div class="app-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar-nav">
+      <ul class="nav-root">
+        
+        <!-- My Home -->
+        <li class="nav-entry">
+          <a href="home.html">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <path d="M8 1.5 L1 8 L3 8 L3 14 L7 14 L7 10 L9 10 L9 14 L13 14 L13 8 L15 8 Z" fill="#c68a4c" stroke="#5c3b1e" stroke-width="0.8" />
+              <polygon points="8,1 15.5,7.5 14,8.5 8,3 2,8.5 0.5,7.5" fill="#c63d2b" />
+              <rect x="9.5" y="5.5" width="2" height="2" fill="#5dade2" />
+            </svg>
+            <span class="label">My Home</span>
+          </a>
+        </li>
+
+        <!-- Profile Category -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-profile', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="1" y="2" width="14" height="11" rx="1" fill="#e8edf2" stroke="#4a6572" stroke-width="1" />
+              <rect x="2.5" y="4" width="4" height="4.5" fill="#3498db" />
+              <line x1="8" y1="4.5" x2="13" y2="4.5" stroke="#333" stroke-width="1" />
+              <line x1="8" y1="7" x2="13" y2="7" stroke="#333" stroke-width="1" />
+              <line x1="3" y1="10.5" x2="13" y2="10.5" stroke="#888" stroke-width="1" />
+            </svg>
+            <span class="label">Profile</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu is-hidden" id="grp-profile">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1.5" y="2" width="13" height="10" rx="1" fill="#f4f6f7" stroke="#5d6d7e" stroke-width="0.9"/>
+                  <circle cx="5" cy="5.5" r="2" fill="#e74c3c"/>
+                  <circle cx="12" cy="11" r="3.5" fill="#2ecc71"/>
+                  <path d="M12 9 V13 M10 11 H14" stroke="#fff" stroke-width="1.2"/>
+                </svg>
+                My Contact Info
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1.5" width="12" height="13" fill="#fff" stroke="#34495e" stroke-width="1"/>
+                  <rect x="2" y="1.5" width="12" height="3" fill="#95a5a6"/>
+                  <line x1="2" y1="7.5" x2="14" y2="7.5" stroke="#bdc3c7" stroke-width="0.8"/>
+                  <line x1="2" y1="10.5" x2="14" y2="10.5" stroke="#bdc3c7" stroke-width="0.8"/>
+                  <line x1="6.5" y1="4.5" x2="6.5" y2="14.5" stroke="#bdc3c7" stroke-width="0.8"/>
+                </svg>
+                My Personal Data
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="10" height="13" fill="#fffae6" stroke="#b7950b" stroke-width="1"/>
+                  <text x="3" y="7" font-size="5" font-weight="bold" fill="#900">1.00</text>
+                  <polygon points="8,14 14,8 15,9 9,15" fill="#f39c12"/>
+                  <polygon points="7,15 8,14 9,15" fill="#2c3e50"/>
+                </svg>
+                My Grades
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1.5" y="3" width="13" height="11" rx="1" fill="#fff" stroke="#566573" stroke-width="1"/>
+                  <rect x="1.5" y="3" width="13" height="3.5" fill="#e74c3c"/>
+                  <circle cx="5" cy="9" r="1" fill="#3498db"/>
+                  <circle cx="8" cy="9" r="1" fill="#3498db"/>
+                  <circle cx="11" cy="9" r="1" fill="#3498db"/>
+                  <circle cx="5" cy="12" r="1" fill="#3498db"/>
+                  <circle cx="8" cy="12" r="1" fill="#3498db"/>
+                </svg>
+                My Schedule
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <path d="M2 3 Q8 4 8 13 Q4 12 2 12 Z" fill="#ebf5fb" stroke="#2980b9" stroke-width="0.9"/>
+                  <path d="M14 3 Q8 4 8 13 Q12 12 14 12 Z" fill="#ebf5fb" stroke="#2980b9" stroke-width="0.9"/>
+                  <polygon points="11,1 15,5 14,6 10,2" fill="#f1c40f"/>
+                </svg>
+                My Curriculum
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1.5" y="3" width="13" height="9.5" rx="1" fill="#eaeded" stroke="#7f8c8d" stroke-width="1"/>
+                  <polyline points="2,4 8,8.5 14,4" fill="none" stroke="#2980b9" stroke-width="1.2"/>
+                </svg>
+                My Office 365
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <circle cx="6" cy="6" r="3.5" fill="none" stroke="#d4ac0d" stroke-width="2"/>
+                  <path d="M9 7.5 L14 12.5 L12.5 14 L11.5 13 L11.5 11.5 L9.5 11.5" stroke="#b7950b" stroke-width="1.8" fill="none"/>
+                </svg>
+                Reset My Password
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="10" height="13" fill="#fff" stroke="#7f8c8d" stroke-width="1"/>
+                  <line x1="4" y1="4.5" x2="9" y2="4.5" stroke="#95a5a6" stroke-width="1"/>
+                  <line x1="4" y1="7" x2="9" y2="7" stroke="#95a5a6" stroke-width="1"/>
+                  <circle cx="11.5" cy="11.5" r="3" fill="#3498db"/>
+                  <path d="M11.5 10 V13 M10 11.5 H13" stroke="#fff" stroke-width="0.8"/>
+                </svg>
+                Reset Info Update
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Enrollment Group (Manage Course Active) -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-enrollment', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="1" width="11" height="13.5" fill="#fdfefe" stroke="#5d6d7e" stroke-width="1"/>
+              <path d="M4 4 H10 M4 7 H10 M4 10 H8" stroke="#34495e" stroke-width="1"/>
+            </svg>
+            <span class="label">Enrollment</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu" id="grp-enrollment">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="11" height="13.5" fill="#fff" stroke="#7f8c8d" stroke-width="0.8"/>
+                  <rect x="3.5" y="4" width="8" height="6.5" fill="#e74c3c"/>
+                  <text x="4.5" y="8.8" font-size="4" font-weight="bold" fill="#fff">PDF</text>
+                </svg>
+                <span>Online Enrollment User Manual</span>
+              </a>
+            </li>
+            <li>
+              <a href="manage-course.html">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <polygon points="8,1 15,4 8,7 1,4" fill="#f5b041" stroke="#b9770e" stroke-width="0.8"/>
+                  <polygon points="1,4 8,7 8,14 1,11" fill="#d68910" stroke="#b9770e" stroke-width="0.8"/>
+                  <polygon points="15,4 8,7 8,14 15,11" fill="#f8c471" stroke="#b9770e" stroke-width="0.8"/>
+                </svg>
+                <span>Manage Course</span>
+              </a>
+            </li>
+            <li class="active-page">
+              <a href="manage-section.html">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1" y="2" width="14" height="11" fill="#fff" stroke="#2980b9" stroke-width="1"/>
+                  <rect x="1" y="2" width="14" height="3" fill="#3498db"/>
+                  <line x1="5.5" y1="2" x2="5.5" y2="13" stroke="#2980b9" stroke-width="0.8"/>
+                  <line x1="10.5" y1="2" x2="10.5" y2="13" stroke="#2980b9" stroke-width="0.8"/>
+                </svg>
+                <span>Manage Section</span>
+              </a>
+            </li>
+            <li>
+              <a href="payments.html">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="2" width="12" height="12" rx="1.5" fill="#e8f8f5" stroke="#1abc9c" stroke-width="1"/>
+                  <polyline points="4,8 7,11 12,4" fill="none" stroke="#16a085" stroke-width="1.8"/>
+                </svg>
+                <span>Finalization</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="11" height="13.5" fill="#fff" stroke="#7f8c8d" stroke-width="0.8"/>
+                  <rect x="3.5" y="4" width="8" height="6.5" fill="#e74c3c"/>
+                  <text x="4.5" y="8.8" font-size="4" font-weight="bold" fill="#fff">PDF</text>
+                </svg>
+                <span>Course Request Forms</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Bills & Payments -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-bills', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="4" width="12" height="8" rx="1" fill="#f9e79f" stroke="#b7950b" stroke-width="1"/>
+              <circle cx="8" cy="8" r="2" fill="#f1c40f" stroke="#b7950b" stroke-width="0.8"/>
+            </svg>
+            <span class="label">Bills &amp; Payments</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu" id="grp-bills">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <polygon points="8,1 2,5 14,5" fill="#5dade2"/>
+                  <rect x="3" y="6" width="2" height="6" fill="#2e86c1"/>
+                  <rect x="7" y="6" width="2" height="6" fill="#2e86c1"/>
+                  <rect x="11" y="6" width="2" height="6" fill="#2e86c1"/>
+                  <rect x="1.5" y="12" width="13" height="2" fill="#1b4f72"/>
+                </svg>
+                Guidelines for Bukas Installment Plan
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1.5" width="11" height="13" fill="#fff" stroke="#7f8c8d" stroke-width="1"/>
+                  <line x1="4" y1="4.5" x2="10" y2="4.5" stroke="#333" stroke-width="1"/>
+                  <line x1="4" y1="7" x2="10" y2="7" stroke="#333" stroke-width="1"/>
+                  <line x1="4" y1="9.5" x2="10" y2="9.5" stroke="#333" stroke-width="1"/>
+                </svg>
+                Statement of account
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <circle cx="7" cy="8" r="5" fill="#fdfefe" stroke="#34495e" stroke-width="1"/>
+                  <polyline points="7,5 7,8 9.5,8" stroke="#e74c3c" stroke-width="1" fill="none"/>
+                  <circle cx="12" cy="11.5" r="2.5" fill="#f39c12"/>
+                </svg>
+                Payment History
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Services -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-services', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <circle cx="8" cy="8" r="3.5" fill="#bdc3c7" stroke="#34495e" stroke-width="1"/>
+              <path d="M8,1 L8,4 M8,12 L8,15 M1,8 L4,8 M12,8 L15,8" stroke="#34495e" stroke-width="1.8"/>
+            </svg>
+            <span class="label">Services</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu" id="grp-services">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="11" height="13.5" fill="#fff" stroke="#7f8c8d" stroke-width="0.8"/>
+                  <rect x="3.5" y="4" width="8" height="6.5" fill="#e74c3c"/>
+                  <text x="4.5" y="8.8" font-size="4" font-weight="bold" fill="#fff">PDF</text>
+                </svg>
+                Academic Documents
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <path d="M8 2 V10 M5 7 L8 10 L11 7" stroke="#27ae60" stroke-width="1.8" fill="none"/>
+                  <rect x="2" y="12" width="12" height="2" fill="#229954"/>
+                </svg>
+                Downloadable Forms
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Concern/Feedback -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-feedback', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <path d="M2 3 Q2 1 4 1 H12 Q14 1 14 3 V9 Q14 11 12 11 H5 L2 14 Z" fill="#fcf3cf" stroke="#f39c12" stroke-width="1"/>
+            </svg>
+            <span class="label">Concern/Feedback</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu" id="grp-feedback">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1.5" y="4" width="13" height="9" fill="#fef9e7" stroke="#f39c12" stroke-width="1"/>
+                  <polyline points="1.5,4 8,9 14.5,4" fill="none" stroke="#d68910" stroke-width="1"/>
+                </svg>
+                Email myCounselor
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <path d="M2 3 Q2 1 4 1 H12 Q14 1 14 3 V9 Q14 11 12 11 H5 L2 14 Z" fill="#fcf3cf" stroke="#f39c12" stroke-width="1"/>
+                </svg>
+                Service Feedback
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Help -->
+        <li class="nav-entry">
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <circle cx="8" cy="8" r="6.5" fill="#f9e79f" stroke="#d4ac0d" stroke-width="1"/>
+              <text x="6" y="11" font-size="8" font-weight="bold" fill="#7d6608">?</text>
+            </svg>
+            <span class="label">Help</span>
+          </a>
+        </li>
+
+        <!-- Sign Out -->
+        <li class="nav-entry">
+          <a href="login.html" data-signout>
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="1" y="2" width="6" height="12" fill="#566573"/>
+              <path d="M7 2 L14 4 V12 L7 14 Z" fill="#a0522d" stroke="#5c3b1e" stroke-width="0.8"/>
+              <circle cx="9" cy="8" r="0.8" fill="#f1c40f"/>
+            </svg>
+            <span class="label">Sign Out</span>
+          </a>
+        </li>
+
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="page-content manage-section-page">
+      
+      <!-- Top Title Bar -->
+      <div class="section-title-strip">Manage Section</div>
+
+      <div class="section-flex-container">
+        
+        <!-- Left Pane: Course Table & Calendar Grid (Equal Width) -->
+        <div class="section-left-pane">
+          
+          <!-- Course Table -->
+          <table class="table-manage-sec" id="tableManageSec">
+            <thead>
+              <tr>
+                <th style="width: 82px;">Course<br>Code</th>
+                <th>Course Title</th>
+                <th style="width: 58px;">Section</th>
+                <th style="width: 58px;">EQ<br>Course</th>
+                <th style="width: 52px;">Remove</th>
+              </tr>
+            </thead>
+            <tbody id="manageSectionTbody"></tbody>
+            <!-- Requirement 1: Total Units in the middle -->
+            <tfoot>
+              <tr>
+                <td colspan="5">Total Units: <span id="sectionTotalUnits">0</span></td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <!-- Legend Text -->
+          <div class="sec-legend-line">
+            <strong>LEGEND:</strong> 
+            <span style="color: #cc1b1b; font-weight: bold;">C-Continuing</span> | 
+            <span style="color: #2b74c2; font-weight: bold;">COURSERA-W/ Coursera Cetificate</span>
+          </div>
+
+          <!-- Colored Badges -->
+          <div class="pills-group">
+            <span class="pill-item pill-green">Existing Schedule</span>
+            <span class="pill-item pill-yellow">Selected Schedule</span>
+            <span class="pill-item pill-red">Conflict Schedule</span>
+            <span class="pill-item pill-blue">Reassign Section</span>
+          </div>
+
+          <!-- Weekly Schedule Grid -->
+          <table class="grid-timetable" id="gridTimetable">
+            <thead>
+              <tr>
+                <th style="width: 70px;">Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 07:30AM - 09:00AM -->
+              <tr data-slot="07:30AM-09:00AM">
+                <td class="time-cell">07:30AM<br>09:00AM</td>
+                <td data-day="Mon"></td>
+                <td data-day="Tue">
+                  <div class="full-cell-slot slot-existing" data-course="ITS152P">
+                    <span>ITS152P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Wed"></td>
+                <td data-day="Thu">
+                  <div class="full-cell-slot slot-existing" data-course="ITS142P">
+                    <span>ITS142P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Fri"></td>
+                <td data-day="Sat"></td>
+                <td data-day="Sun"></td>
+              </tr>
+
+              <!-- 09:00AM - 10:30AM -->
+              <tr data-slot="09:00AM-10:30AM">
+                <td class="time-cell">09:00AM<br>10:30AM</td>
+                <td data-day="Mon"></td>
+                <td data-day="Tue">
+                  <div class="full-cell-slot slot-existing" data-course="ITS152P">
+                    <span>ITS152P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Wed"></td>
+                <td data-day="Thu">
+                  <div class="full-cell-slot slot-existing" data-course="ITS142P">
+                    <span>ITS142P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Fri"></td>
+                <td data-day="Sat"></td>
+                <td data-day="Sun"></td>
+              </tr>
+
+              <!-- 10:30AM - 12:00PM -->
+              <tr data-slot="10:30AM-12:00PM">
+                <td class="time-cell">10:30AM<br>12:00PM</td>
+                <td data-day="Mon">
+                  <div class="full-cell-slot slot-existing" data-course="ITS152P">
+                    <span>ITS152P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Tue">
+                  <div class="full-cell-slot slot-existing" data-course="ITS152P">
+                    <span>ITS152P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Wed">
+                  <div class="full-cell-slot slot-existing" data-course="ITS142P">
+                    <span>ITS142P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Thu">
+                  <div class="full-cell-slot slot-existing" data-course="ITS142P">
+                    <span>ITS142P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Fri"></td>
+                <td data-day="Sat"></td>
+                <td data-day="Sun"></td>
+              </tr>
+
+              <!-- 12:00PM - 01:30PM -->
+              <tr data-slot="12:00PM-01:30PM">
+                <td class="time-cell">12:00PM<br>01:30PM</td>
+                <td data-day="Mon">
+                  <div class="full-cell-slot slot-existing" data-course="ITS152P">
+                    <span>ITS152P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Tue"></td>
+                <td data-day="Wed">
+                  <div class="full-cell-slot slot-existing" data-course="ITS142P">
+                    <span>ITS142P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Thu"></td>
+                <td data-day="Fri"></td>
+                <td data-day="Sat">
+                  <div class="full-cell-slot slot-existing" data-course="ISS181-02">
+                    <span>ISS181-02</span>
+                    <span>BM10</span>
+                  </div>
+                </td>
+                <td data-day="Sun"></td>
+              </tr>
+
+              <!-- 01:30PM - 03:00PM -->
+              <tr data-slot="01:30PM-03:00PM">
+                <td class="time-cell">01:30PM<br>03:00PM</td>
+                <td data-day="Mon"></td>
+                <td data-day="Tue"></td>
+                <td data-day="Wed">
+                  <div class="full-cell-slot slot-existing" data-course="ITS142P">
+                    <span>ITS142P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Thu"></td>
+                <td data-day="Fri"></td>
+                <td data-day="Sat">
+                  <div class="full-cell-slot slot-existing" data-course="ISS181-02">
+                    <span>ISS181-02</span>
+                    <span>BM10</span>
+                  </div>
+                </td>
+                <td data-day="Sun"></td>
+              </tr>
+
+              <!-- 03:00PM - 04:30PM -->
+              <tr data-slot="03:00PM-04:30PM">
+                <td class="time-cell">03:00PM<br>04:30PM</td>
+                <td data-day="Mon">
+                  <div class="full-cell-slot slot-existing" data-course="ITS142P">
+                    <span>ITS142P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Tue"></td>
+                <td data-day="Wed">
+                  <div class="full-cell-slot slot-existing" data-course="ITS142P">
+                    <span>ITS142P</span>
+                    <span>BM11</span>
+                  </div>
+                </td>
+                <td data-day="Thu"></td>
+                <td data-day="Fri"></td>
+                <td data-day="Sat">
+                  <div class="full-cell-slot slot-existing" data-course="ISS181-02">
+                    <span>ISS181-02</span>
+                    <span>BM10</span>
+                  </div>
+                </td>
+                <td data-day="Sun"></td>
+              </tr>
+
+              <!-- 04:30PM - 06:00PM -->
+              <tr data-slot="04:30PM-06:00PM">
+                <td class="time-cell">04:30PM<br>06:00PM</td>
+                <td data-day="Mon"></td>
+                <td data-day="Tue"></td>
+                <td data-day="Wed"></td>
+                <td data-day="Thu"></td>
+                <td data-day="Fri"></td>
+                <td data-day="Sat"></td>
+                <td data-day="Sun"></td>
+              </tr>
+
+              <!-- 06:00PM - 07:30PM -->
+              <tr data-slot="06:00PM-07:30PM">
+                <td class="time-cell">06:00PM<br>07:30PM</td>
+                <td data-day="Mon"></td>
+                <td data-day="Tue"></td>
+                <td data-day="Wed"></td>
+                <td data-day="Thu"></td>
+                <td data-day="Fri"></td>
+                <td data-day="Sat"></td>
+                <td data-day="Sun"></td>
+              </tr>
+
+              <!-- 07:30PM - 09:00PM -->
+              <tr data-slot="07:30PM-09:00PM">
+                <td class="time-cell">07:30PM<br>09:00PM</td>
+                <td data-day="Mon"></td>
+                <td data-day="Tue"></td>
+                <td data-day="Wed"></td>
+                <td data-day="Thu"></td>
+                <td data-day="Fri"></td>
+                <td data-day="Sat"></td>
+                <td data-day="Sun"></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <!-- Available Sections Table (Side Panel) -->
+        <div class="section-right-pane" id="availSectionsContainer">
+          <table class="table-avail-sections">
+            <thead>
+              <tr>
+                <th colspan="5" id="availHeaderCode">Course: MATH181</th>
+              </tr>
+              <tr>
+                <th style="width: 42px;">Section</th>
+                <th style="width: 48px;">Day</th>
+                <th>Schedule</th>
+                <th style="width: 28px;">Slot</th>
+                <!-- Requirement 7: Add column -->
+                <th style="width: 32px;">Add</th>
+              </tr>
+            </thead>
+            <tbody id="availSectionsTbody">
+              <!-- Rendered dynamically with bundled days and + button -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Bottom Dark Red Footer -->
+  <footer class="bottom-footer">
+    Copyright &copy; 2001-2026. All rights reserved. Mapúa University<br />
+    <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a><br />
+    <span>helpdesk@mapua.edu.ph</span>
+  </footer>
+
+  <script src="../js/enrollment-state.js"></script>
+  <script src="../js/payment-flow.js"></script>
+  <script>
+    window.myMapuaPaymentFlow.setActiveGroup('grp-enrollment');
+
+    function toggleSection(id, headerEl) {
+      const sub = document.getElementById(id);
+      const expander = headerEl.querySelector('.expander');
+      if (sub.classList.contains('is-hidden')) {
+        sub.classList.remove('is-hidden');
+        expander.textContent = '-';
+        expander.className = 'expander minus';
+      } else {
+        sub.classList.add('is-hidden');
+        expander.textContent = '+';
+        expander.className = 'expander plus';
+      }
+    }
+
+    // Available sections database with bundled time slots
+    const courseSectionsData = {
+      'MATH181': [
+        { section: 'BM9', days: ['Mon', 'Wed', 'Fri'], time: '09:00 AM-10:30 AM', slot: '36', slotKey: '09:00AM-10:30AM' },
+        { section: 'BM10', days: ['Mon', 'Wed', 'Fri'], time: '07:30 AM-09:00 AM', slot: '21', slotKey: '07:30AM-09:00AM' },
+        { section: 'BM11', days: ['Mon', 'Wed', 'Fri'], time: '06:00 PM-07:30 PM', slot: '14', slotKey: '06:00PM-07:30PM' },
+        { section: 'BM13', days: ['Mon', 'Wed', 'Fri'], time: '01:30 PM-03:00 PM', slot: '38', slotKey: '01:30PM-03:00PM' },
+        { section: 'BM14', days: ['Mon', 'Wed', 'Fri'], time: '04:30 PM-06:00 PM', slot: '16', slotKey: '04:30PM-06:00PM' }
+      ],
+      'CSS140-1': [
+        { section: 'BM1', days: ['Mon', 'Wed', 'Fri'], time: '09:00 AM-10:30 AM', slot: '32', slotKey: '09:00AM-10:30AM' },
+        { section: 'BM2', days: ['Mon', 'Tue', 'Thu'], time: '01:30 PM-03:00 PM', slot: '28', slotKey: '01:30PM-03:00PM' },
+        { section: 'BM3', days: ['Tue', 'Wed', 'Fri'], time: '06:00 PM-07:30 PM', slot: '24', slotKey: '06:00PM-07:30PM' }
+      ],
+      'ISS160': [
+        { section: 'BM1', days: ['Mon', 'Wed', 'Fri'], time: '10:30 AM-12:00 PM', slot: '25', slotKey: '10:30AM-12:00PM' },
+        { section: 'BM2', days: ['Mon', 'Tue', 'Thu'], time: '04:30 PM-06:00 PM', slot: '27', slotKey: '04:30PM-06:00PM' },
+        { section: 'BM3', days: ['Tue', 'Wed', 'Fri'], time: '07:30 PM-09:00 PM', slot: '19', slotKey: '07:30PM-09:00PM' }
+      ],
+      'ITS142P': [
+        { section: 'BM11', days: ['Mon', 'Wed'], time: '10:30 AM-12:00 PM', slot: '18', slotKey: '10:30AM-12:00PM', lab: { day: 'Thu', time: '01:30 PM-06:00 PM', slotKeys: ['01:30PM-03:00PM', '03:00PM-04:30PM', '04:30PM-06:00PM'] } },
+        { section: 'BM12', days: ['Tue', 'Thu'], time: '01:30 PM-03:00 PM', slot: '16', slotKey: '01:30PM-03:00PM', lab: { day: 'Fri', time: '07:30 AM-12:00 PM', slotKeys: ['07:30AM-09:00AM', '09:00AM-10:30AM', '10:30AM-12:00PM'] } },
+        { section: 'BM13', days: ['Tue', 'Thu'], time: '04:30 PM-06:00 PM', slot: '12', slotKey: '04:30PM-06:00PM', lab: { day: 'Mon', time: '07:30 AM-12:00 PM', slotKeys: ['07:30AM-09:00AM', '09:00AM-10:30AM', '10:30AM-12:00PM'] } }
+      ],
+      'ITS152P': [
+        { section: 'BM11', days: ['Tue', 'Thu'], time: '07:30 AM-09:00 AM', slot: '20', slotKey: '07:30AM-09:00AM', lab: { day: 'Fri', time: '10:30 AM-03:00 PM', slotKeys: ['10:30AM-12:00PM', '12:00PM-01:30PM', '01:30PM-03:00PM'] } },
+        { section: 'BM12', days: ['Mon', 'Wed'], time: '01:30 PM-03:00 PM', slot: '17', slotKey: '01:30PM-03:00PM', lab: { day: 'Thu', time: '03:00 PM-07:30 PM', slotKeys: ['03:00PM-04:30PM', '04:30PM-06:00PM', '06:00PM-07:30PM'] } },
+        { section: 'BM13', days: ['Mon', 'Wed'], time: '06:00 PM-07:30 PM', slot: '13', slotKey: '06:00PM-07:30PM', lab: { day: 'Tue', time: '07:30 AM-12:00 PM', slotKeys: ['07:30AM-09:00AM', '09:00AM-10:30AM', '10:30AM-12:00PM'] } }
+      ],
+      'ITS165-1': [
+        { section: 'BM1', days: ['Mon', 'Wed', 'Fri'], time: '07:30 AM-09:00 AM', slot: '22', slotKey: '07:30AM-09:00AM' },
+        { section: 'BM2', days: ['Mon', 'Tue', 'Thu'], time: '01:30 PM-03:00 PM', slot: '18', slotKey: '01:30PM-03:00PM' },
+        { section: 'BM3', days: ['Tue', 'Wed', 'Fri'], time: '04:30 PM-06:00 PM', slot: '15', slotKey: '04:30PM-06:00PM' }
+      ],
+      'ISS181-02': [
+        { section: 'BM10', days: [], time: '', slot: '30', specialized: { day: 'Sat', time: '12:00 PM-04:30 PM', slotKeys: ['12:00PM-01:30PM', '01:30PM-03:00PM', '03:00PM-04:30PM'] } },
+        { section: 'BM11', days: [], time: '', slot: '24', specialized: { day: 'Sat', time: '07:30 AM-12:00 PM', slotKeys: ['07:30AM-09:00AM', '09:00AM-10:30AM', '10:30AM-12:00PM'] } }
+      ],
+      'ISS181-03': [
+        { section: 'BM12', days: [], time: '', slot: '18', specialized: { day: 'Sat', time: '12:00 PM-04:30 PM', slotKeys: ['12:00PM-01:30PM', '01:30PM-03:00PM', '03:00PM-04:30PM'] } }
+      ],
+      'ISS181-04': [
+        { section: 'BM13', days: [], time: '', slot: '12', specialized: { day: 'Sat', time: '07:30 AM-12:00 PM', slotKeys: ['07:30AM-09:00AM', '09:00AM-10:30AM', '10:30AM-12:00PM'] } }
+      ]
+    };
+
+    function getSectionMeetings(item) {
+      const meetings = (item.days || []).map(day => ({ day, time: item.time, slotKeys: [item.slotKey] }));
+      if (item.lab) {
+        meetings.push({ day: `${item.lab.day} Lab`, time: item.lab.time, slotKeys: item.lab.slotKeys });
+      }
+      if (item.specialized) {
+        meetings.push({ day: item.specialized.day, time: item.specialized.time, slotKeys: item.specialized.slotKeys });
+      }
+      return meetings;
+    }
+
+    let currentSelectedCourse = 'MATH181';
+    let activePreviewSection = null;
+
+    // Requirement 2 & 3: Render available sections as bundled groups
+    function showCourseSections(courseCode, rowEl) {
+      currentSelectedCourse = courseCode;
+      clearCalendarPreview();
+
+      document.querySelectorAll('#tableManageSec tbody tr').forEach(r => r.classList.remove('row-selected'));
+      if (rowEl) rowEl.classList.add('row-selected');
+
+      const headerCode = document.getElementById('availHeaderCode');
+      const tbody = document.getElementById('availSectionsTbody');
+
+      headerCode.textContent = `Course: ${courseCode}`;
+      tbody.innerHTML = '';
+
+      const assignedSection = window.myMapuaEnrollment.getCourses().find(course => course.code === courseCode)?.section;
+      const list = (courseSectionsData[courseCode] || []).filter(item => item.section !== assignedSection);
+
+      if (list.length === 0) {
+        const message = assignedSection ? 'No alternate sections are available.' : `No Available Sections for ${courseCode}`;
+        tbody.innerHTML = `<tr><td colspan="5" style="padding: 14px 6px; color: #555; text-align: center;">${message}</td></tr>`;
+        return;
+      }
+
+      list.forEach(item => {
+        const meetings = getSectionMeetings(item);
+        const rowCount = meetings.length;
+
+        meetings.forEach((meeting, idx) => {
+          const tr = document.createElement('tr');
+          tr.className = `bundle-row bundle-${item.section}`;
+          tr.addEventListener('mouseenter', () => {
+            document.querySelectorAll(`.bundle-${item.section}`).forEach(bundleRow => bundleRow.classList.add('bundle-hovered'));
+          });
+          tr.addEventListener('mouseleave', () => {
+            document.querySelectorAll(`.bundle-${item.section}`).forEach(bundleRow => bundleRow.classList.remove('bundle-hovered'));
+          });
+          
+          // Clicking any row of the bundle selects the whole bundle
+          tr.onclick = function() {
+            previewBundledSection(courseCode, item);
+          };
+
+          if (idx === 0) {
+            tr.innerHTML = `
+              <td rowspan="${rowCount}" style="font-weight: bold;">${item.section}</td>
+              <td>${meeting.day}</td>
+              <td>${meeting.time}</td>
+              <td rowspan="${rowCount}">${item.slot}</td>
+              <td rowspan="${rowCount}">
+                <button type="button" class="btn-add-section" onclick="confirmAddSection('${courseCode}', '${item.section}', event)" title="Add Section">+</button>
+              </td>
+            `;
+          } else {
+            tr.innerHTML = `
+              <td>${meeting.day}</td>
+              <td>${meeting.time}</td>
+            `;
+          }
+          tbody.appendChild(tr);
+        });
+      });
+    }
+
+    // Requirements 4 & 5: Clicking the section bundle reflects yellow, conflict reflects red
+    function previewBundledSection(courseCode, item) {
+      clearCalendarPreview();
+      activePreviewSection = item;
+
+      // Highlight bundled rows in the section table
+      document.querySelectorAll('.table-avail-sections tbody tr').forEach(r => r.classList.remove('bundle-active'));
+      document.querySelectorAll(`.bundle-${item.section}`).forEach(r => r.classList.add('bundle-active'));
+
+      getSectionMeetings(item).forEach(meeting => {
+        meeting.slotKeys.forEach(slotKey => {
+          const rowSlot = document.querySelector(`tr[data-slot="${slotKey}"]`);
+          const cell = rowSlot && rowSlot.querySelector(`td[data-day="${meeting.day.slice(0, 3)}"]`);
+          if (!cell) return;
+
+          const existingSlot = cell.querySelector('.slot-existing');
+          if (existingSlot) {
+            const enrolledCode = existingSlot.getAttribute('data-course');
+            if (enrolledCode !== courseCode) {
+              existingSlot.classList.remove('slot-existing');
+              existingSlot.classList.add('slot-conflict');
+              existingSlot.setAttribute('data-was-conflict', 'true');
+            }
+          } else {
+            const marker = document.createElement('div');
+            marker.className = 'full-cell-slot slot-selected preview-marker';
+            marker.dataset.course = courseCode;
+            const codeLabel = document.createElement('span');
+            codeLabel.textContent = courseCode;
+            const sectionLabel = document.createElement('span');
+            sectionLabel.textContent = item.section;
+            marker.append(codeLabel, sectionLabel);
+            cell.appendChild(marker);
+          }
+        });
+      });
+    }
+
+    // Clear temporary yellow/red preview highlights
+    function clearCalendarPreview() {
+      // Remove yellow preview markers
+      document.querySelectorAll('#gridTimetable .preview-marker').forEach(m => m.remove());
+
+      // Revert conflicted red slots back to green
+      document.querySelectorAll('#gridTimetable .slot-conflict[data-was-conflict="true"]').forEach(c => {
+        c.classList.remove('slot-conflict');
+        c.classList.add('slot-existing');
+        c.removeAttribute('data-was-conflict');
+      });
+
+      document.querySelectorAll('.table-avail-sections tbody tr').forEach(r => r.classList.remove('bundle-active'));
+      activePreviewSection = null;
+    }
+
+    // Requirement 7: Accept (+) button; block if conflict exists
+    function confirmAddSection(courseCode, sectionName, event) {
+      if (event) event.stopPropagation();
+
+      const item = (courseSectionsData[courseCode] || []).find(s => s.section === sectionName);
+      if (!item) {
+        window.myMapuaEnrollment.showNotice(`Could not add ${sectionName} for ${courseCode}: its schedule is unavailable.`, 'error');
+        return;
+      }
+
+      const conflicts = [];
+      getSectionMeetings(item).forEach(meeting => meeting.slotKeys.forEach(slotKey => {
+        const rowSlot = document.querySelector(`tr[data-slot="${slotKey}"]`);
+        const cell = rowSlot && rowSlot.querySelector(`td[data-day="${meeting.day.slice(0, 3)}"]`);
+        const existingSlot = cell && cell.querySelector('.slot-existing, .slot-conflict');
+        if (existingSlot && existingSlot.dataset.course !== courseCode) {
+          conflicts.push(`${meeting.day} ${meeting.time}`);
+        }
+      }));
+
+      if (conflicts.length > 0) {
+        window.myMapuaEnrollment.showNotice(`Could not add ${sectionName} for ${courseCode}: schedule conflict at ${[...new Set(conflicts)].join(', ')}.`, 'error');
+        return;
+      }
+
+      clearCalendarPreview();
+
+      const row = document.querySelector(`#tableManageSec tr[data-code="${courseCode}"]`);
+      if (row) {
+        row.querySelector('.sec-cell').textContent = sectionName;
+        row.querySelector('.rem-cell').innerHTML = `<button type="button" class="red-square-btn" onclick="removeSection('${courseCode}', event)" aria-label="Remove section ${sectionName}">-</button>`;
+      }
+
+      const saved = saveSectionAssignment(courseCode, sectionName);
+      removeCalendarBlocks(courseCode);
+      renderCalendarSection(courseCode, item);
+      showCourseSections(courseCode, row);
+      if (saved) {
+        window.myMapuaEnrollment.showNotice(`Section ${sectionName} added successfully to ${courseCode}.`);
+      } else {
+        window.myMapuaEnrollment.showNotice(`Added ${sectionName} to ${courseCode} for this session, but browser storage is unavailable so the assignment could not be saved.`, 'error');
+      }
+    }
+
+    // Remove section & clear its blocks from calendar
+    function removeSection(courseCode, event) {
+      if (event) event.stopPropagation();
+
+      const row = document.querySelector(`#tableManageSec tr[data-code="${courseCode}"]`);
+      const sectionName = row && row.querySelector('.sec-cell').textContent.trim();
+      if (!sectionName) {
+        window.myMapuaEnrollment.showNotice(`No section was removed from ${courseCode}: no section is currently assigned.`, 'error');
+        return;
+      }
+
+      if (row) {
+        row.querySelector('.sec-cell').textContent = '';
+        row.querySelector('.rem-cell').innerHTML = '';
+      }
+      const saved = saveSectionAssignment(courseCode, '');
+
+      clearCalendarPreview();
+      removeCalendarBlocks(courseCode);
+      if (row) showCourseSections(courseCode, row);
+      if (saved) {
+        window.myMapuaEnrollment.showNotice(`Section ${sectionName} removed successfully from ${courseCode}.`);
+      } else {
+        window.myMapuaEnrollment.showNotice(`Removed ${sectionName} from ${courseCode} for this session, but browser storage is unavailable so the change could not be saved.`, 'error');
+      }
+    }
+
+    function removeCalendarBlocks(courseCode) {
+      document.querySelectorAll(`#gridTimetable .full-cell-slot[data-course="${courseCode}"]`).forEach(block => block.remove());
+    }
+
+    function renderCalendarSection(courseCode, item) {
+      getSectionMeetings(item).forEach(meeting => meeting.slotKeys.forEach(slotKey => {
+        const rowSlot = document.querySelector(`tr[data-slot="${slotKey}"]`);
+        const cell = rowSlot && rowSlot.querySelector(`td[data-day="${meeting.day.slice(0, 3)}"]`);
+        if (!cell || cell.querySelector('.full-cell-slot')) return;
+
+        const block = document.createElement('div');
+        block.className = 'full-cell-slot slot-existing';
+        block.dataset.course = courseCode;
+        const codeLabel = document.createElement('span');
+        codeLabel.textContent = courseCode;
+        const sectionLabel = document.createElement('span');
+        sectionLabel.textContent = item.section;
+        block.append(codeLabel, sectionLabel);
+        cell.appendChild(block);
+      }));
+    }
+
+    function saveSectionAssignment(courseCode, sectionName) {
+      const courses = window.myMapuaEnrollment.getCourses();
+      const course = courses.find(item => item.code === courseCode);
+      if (!course) return false;
+      course.section = sectionName;
+      return window.myMapuaEnrollment.saveCourses(courses);
+    }
+
+    function renderManageSectionCourses() {
+      const courses = window.myMapuaEnrollment.getCourses();
+      const tbody = document.getElementById('manageSectionTbody');
+      tbody.innerHTML = '';
+
+      courses.forEach(course => {
+        const row = document.createElement('tr');
+        row.className = 'clickable-row';
+        row.dataset.code = course.code;
+        row.onclick = () => showCourseSections(course.code, row);
+
+        [course.code, course.title, course.section || '', '', ''].forEach((value, index) => {
+          const cell = document.createElement('td');
+          cell.textContent = value;
+          if (index !== 1) cell.className = 'center';
+          if (index === 2) cell.classList.add('sec-cell');
+          if (index === 4) cell.classList.add('rem-cell');
+          row.appendChild(cell);
+        });
+
+        if (course.section) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'red-square-btn';
+          button.textContent = '-';
+          button.setAttribute('aria-label', `Remove section ${course.section} from ${course.code}`);
+          button.onclick = event => removeSection(course.code, event);
+          row.querySelector('.rem-cell').appendChild(button);
+        }
+        tbody.appendChild(row);
+      });
+
+      document.getElementById('sectionTotalUnits').textContent = courses.reduce((total, course) => total + Number(course.units || 0), 0);
+      document.querySelectorAll('#gridTimetable .full-cell-slot[data-course]').forEach(block => block.remove());
+
+      courses.forEach(course => {
+        if (!course.section) return;
+        const item = (courseSectionsData[course.code] || []).find(section => section.section === course.section);
+        if (item) renderCalendarSection(course.code, item);
+      });
+
+      const initialCourse = courses.find(course => course.code === 'MATH181') || courses[0];
+      if (initialCourse) {
+        showCourseSections(initialCourse.code, tbody.querySelector(`tr[data-code="${initialCourse.code}"]`));
+      } else {
+        document.getElementById('availHeaderCode').textContent = 'No enrolled courses';
+        document.getElementById('availSectionsTbody').innerHTML = '<tr><td colspan="5" style="padding: 14px 6px; color: #555; text-align: center;">Add courses in Manage Course to continue.</td></tr>';
+      }
+    }
+
+    renderManageSectionCourses();
+  </script>
+</body>
+</html>

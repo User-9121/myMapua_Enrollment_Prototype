@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myMAPÚA - Manage Course</title>
+  <link rel="stylesheet" href="../css/portal-theme.css" />
+  <style>
+    /* Main page wrapper */
+    .course-page-wrapper {
+      padding: 16px 20px;
+      font-family: Arial, Tahoma, Helvetica, sans-serif;
+      font-size: 11px;
+      color: #000;
+      background-color: #ffffff;
+      flex: 1 1 auto;
+    }
+
+    /* Compress contents to the left, leaving ~40% blank space on right */
+    .course-content-column {
+      max-width: 60%;
+      width: 60%;
+      box-sizing: border-box;
+    }
+
+    .main-heading {
+      font-size: 17px;
+      font-weight: bold;
+      color: #000;
+      margin-bottom: 14px;
+      font-family: Arial, sans-serif;
+    }
+
+    .term-title {
+      font-size: 12.5px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #000;
+    }
+
+    /* ================= Top Enrolled Table ================= */
+    .table-top-enrolled {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #8fa6c5;
+      margin-bottom: 4px;
+      background-color: #EAECF2;
+    }
+
+    .table-top-enrolled th {
+      background-color: #cbc69e;
+      border: 1px solid #8fa6c5;
+      padding: 5px 6px;
+      font-size: 11px;
+      font-weight: normal;
+      color: #000000;
+      text-align: center;
+    }
+
+    .table-top-enrolled td {
+      border: 1px solid #ffffff;
+      padding: 5px 8px;
+      font-size: 10.5px;
+      background-color: #EAECF2;
+      color: #000000;
+    }
+
+    .table-top-enrolled tr:nth-child(even) td {
+      background-color: #EAECF2;
+    }
+
+    .table-top-enrolled td.center {
+      text-align: center;
+    }
+
+    .table-top-enrolled .tfoot-row td {
+      background-color: #EAECF2;
+      border: 1px solid #ffffff;
+      padding: 5px 8px;
+    }
+
+    .btn-classic-remove {
+      background-color: #e1e1e1;
+      border: 1px solid #707070;
+      color: #000000;
+      font-size: 11px;
+      font-family: Tahoma, Arial, sans-serif;
+      padding: 2px 14px;
+      cursor: pointer;
+    }
+    .btn-classic-remove:hover {
+      background-color: #d0d0d0;
+    }
+
+    .top-legend-text {
+      font-size: 10.5px;
+      line-height: 1.6;
+      margin-top: 6px;
+      margin-bottom: 22px;
+    }
+    .legend-bc { color: #ff0000; font-weight: bold; }
+    .legend-c { color: #ff0000; font-weight: bold; }
+    .legend-coursera { color: #0000ff; font-weight: bold; }
+
+    /* Student Meta Details */
+    .student-meta-box {
+      font-size: 11.5px;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .units-wrapper-border {
+      border: 1px solid #999999;
+      padding: 3px 6px 5px 6px;
+      margin-bottom: 12px;
+      background-color: #ffffff;
+    }
+    .units-label {
+      font-size: 10.5px;
+      margin-bottom: 2px;
+    }
+    .units-values {
+      font-size: 11px;
+    }
+
+    /* Tabs & Legends */
+    .curriculum-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 1px solid #bcbcbc;
+      padding-bottom: 2px;
+      margin-top: 14px;
+      margin-bottom: 0px;
+    }
+
+    .curriculum-tabs-group {
+      display: flex;
+      gap: 4px;
+      margin-bottom: -2px;
+      margin-left: 5px;
+    }
+
+    .curriculum-tab {
+      font-family: Arial, Tahoma, sans-serif;
+      font-size: 12.5px;
+      font-weight: bold;
+      padding: 3px 14px;
+      border-radius: 0;
+      display: inline-block;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .curriculum-tab.tab-active {
+      background-color: #800000;
+      color: #ffffff;
+      border: 1px solid #5a0000;
+    }
+
+    .curriculum-tab.tab-gold {
+      background-color: #f7c95e;
+      color: #000000;
+      border: 1px solid #735300;
+    }
+
+    .curriculum-legend-container {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: Arial, Tahoma, sans-serif;
+      font-size: 10px;
+    }
+
+    .curriculum-legend-container .legend-box-item {
+      padding: 1px 5px;
+      border: 1px solid #999999;
+      background-color: #ffffff;
+      line-height: 1.3;
+    }
+
+    .legend-box-item.leg-taken { color: #0000cc; }
+    .legend-box-item.leg-in-load { color: #008000; }
+    .legend-box-item.leg-not-yet { color: #000000; }
+    .legend-box-item.leg-incomplete { color: #cc0000; }
+    .legend-box-item.leg-exempted { color: #996633; }
+
+    /* Curriculum Outer Panel */
+    .curriculum-outer-panel {
+      background-color: #ededed;
+      border: 1px solid #d4d4d4;
+      border-top: none;
+      padding: 8px 14px 14px 14px;
+      margin-top: 0px;
+      box-sizing: border-box;
+    }
+
+    .taken-year-bar {
+      font-family: Arial, Tahoma, sans-serif;
+      font-size: 11.5px;
+      margin-bottom: 8px;
+      color: #000000;
+      background-color: transparent;
+    }
+
+    .taken-year-bar a {
+      color: #0000cc;
+      text-decoration: underline;
+      margin: 0 4px;
+      cursor: pointer;
+    }
+
+    .taken-year-bar .active-year-strong {
+      font-weight: bold;
+      color: #000000;
+      margin: 0 4px;
+      text-decoration: none;
+      cursor: default;
+    }
+
+    .curriculum-sub-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 11px;
+    }
+
+    .curriculum-select-styled {
+      font-family: Arial, Tahoma, sans-serif;
+      font-size: 11px;
+      padding: 2px 4px;
+      border: 1px solid #7f9db9;
+      background: #ffffff;
+    }
+
+    /* Curriculum Tables */
+    .curriculum-exact-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: Arial, Tahoma, sans-serif;
+      font-size: 11px;
+      border: 1px solid #8fa6c5;
+      margin-bottom: 14px;
+      background-color: #EAECF2;
+    }
+
+    .curriculum-exact-table th {
+      background-color: #cbc69e;
+      color: #000000;
+      font-weight: normal;
+      font-size: 11px;
+      padding: 4px 6px;
+      text-align: center;
+      border: 1px solid #8fa6c5;
+      line-height: 1.25;
+    }
+
+    .curriculum-exact-table td {
+      padding: 4px 8px;
+      font-size: 11px;
+      border: 1px solid #ffffff;
+      color: #000000;
+      background-color: #EAECF2;
+    }
+
+    .curriculum-exact-table tr:nth-child(even) td {
+      background-color: #EAECF2;
+    }
+
+    .curriculum-exact-table td.cell-center {
+      text-align: center;
+    }
+
+    /* Font colors based on portal state */
+    .text-taken { color: #0000cc !important; }
+    .in-load-green { color: #007700 !important; }
+    .text-exempted { color: #996633 !important; }
+    .text-not-yet { color: #000000 !important; }
+
+    .curriculum-exact-table tr.total-divider-row td {
+      border-top: 2px solid #000000 !important;
+      border-bottom: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #ffffff;
+      background-color: #EAECF2;
+      padding: 4px 8px;
+      font-weight: normal;
+    }
+
+    /* Main Tab & Year Switching Display */
+    .main-tab-panel {
+      display: none;
+    }
+    .main-tab-panel.is-active {
+      display: block;
+    }
+
+    .year-panel {
+      display: none;
+    }
+    .year-panel.is-active {
+      display: block;
+    }
+
+    .empty-term-notice {
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #555555;
+      background: #EAECF2;
+      border: 1px solid #8fa6c5;
+      margin-bottom: 14px;
+    }
+
+    /* Right-aligned action bar underneath tables */
+    .under-table-action-bar {
+      margin-top: 8px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn-submit-action {
+      background-color: #cc1b1b;
+      border: 1px solid #000000;
+      color: #ffffff;
+      padding: 3px 18px;
+      font-size: 11px;
+      font-family: Arial, Tahoma, sans-serif;
+      cursor: pointer;
+    }
+    .btn-submit-action:hover {
+      background-color: #aa1212;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Banner -->
+  <header class="top-banner">
+    <div class="banner-inner">
+      <div class="logo-box">
+        <img 
+          src="../assets/mapua-logo-portal.png" 
+          alt="Mapúa Builder" 
+          class="builder-graphic" 
+          onerror="this.style.display='none'; document.getElementById('builder-fallback').style.display='flex';" 
+        />
+        <div id="builder-fallback" class="builder-fallback-slot">Logo</div>
+      </div>
+    </div>
+    <!-- Gold Stripe -->
+    <div class="gold-line"></div>
+  </header>
+
+  <!-- Shell Wrapper -->
+  <div class="app-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar-nav">
+      <ul class="nav-root">
+        
+        <!-- My Home -->
+        <li class="nav-entry">
+          <a href="home.html">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <path d="M8 1.5 L1 8 L3 8 L3 14 L7 14 L7 10 L9 10 L9 14 L13 14 L13 8 L15 8 Z" fill="#c68a4c" stroke="#5c3b1e" stroke-width="0.8" />
+              <polygon points="8,1 15.5,7.5 14,8.5 8,3 2,8.5 0.5,7.5" fill="#c63d2b" />
+              <rect x="9.5" y="5.5" width="2" height="2" fill="#5dade2" />
+            </svg>
+            <span class="label">My Home</span>
+          </a>
+        </li>
+
+        <!-- Profile Category -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-profile', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="1" y="2" width="14" height="11" rx="1" fill="#e8edf2" stroke="#4a6572" stroke-width="1" />
+              <rect x="2.5" y="4" width="4" height="4.5" fill="#3498db" />
+              <line x1="8" y1="4.5" x2="13" y2="4.5" stroke="#333" stroke-width="1" />
+              <line x1="8" y1="7" x2="13" y2="7" stroke="#333" stroke-width="1" />
+              <line x1="3" y1="10.5" x2="13" y2="10.5" stroke="#888" stroke-width="1" />
+            </svg>
+            <span class="label">Profile</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu is-hidden" id="grp-profile">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1.5" y="2" width="13" height="10" rx="1" fill="#f4f6f7" stroke="#5d6d7e" stroke-width="0.9"/>
+                  <circle cx="5" cy="5.5" r="2" fill="#e74c3c"/>
+                  <circle cx="12" cy="11" r="3.5" fill="#2ecc71"/>
+                  <path d="M12 9 V13 M10 11 H14" stroke="#fff" stroke-width="1.2"/>
+                </svg>
+                My Contact Info
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1.5" width="12" height="13" fill="#fff" stroke="#34495e" stroke-width="1"/>
+                  <rect x="2" y="1.5" width="12" height="3" fill="#95a5a6"/>
+                  <line x1="2" y1="7.5" x2="14" y2="7.5" stroke="#bdc3c7" stroke-width="0.8"/>
+                  <line x1="2" y1="10.5" x2="14" y2="10.5" stroke="#bdc3c7" stroke-width="0.8"/>
+                  <line x1="6.5" y1="4.5" x2="6.5" y2="14.5" stroke="#bdc3c7" stroke-width="0.8"/>
+                </svg>
+                My Personal Data
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="10" height="13" fill="#fffae6" stroke="#b7950b" stroke-width="1"/>
+                  <text x="3" y="7" font-size="5" font-weight="bold" fill="#900">1.00</text>
+                  <polygon points="8,14 14,8 15,9 9,15" fill="#f39c12"/>
+                  <polygon points="7,15 8,14 9,15" fill="#2c3e50"/>
+                </svg>
+                My Grades
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1.5" y="3" width="13" height="11" rx="1" fill="#fff" stroke="#566573" stroke-width="1"/>
+                  <rect x="1.5" y="3" width="13" height="3.5" fill="#e74c3c"/>
+                  <circle cx="5" cy="9" r="1" fill="#3498db"/>
+                  <circle cx="8" cy="9" r="1" fill="#3498db"/>
+                  <circle cx="11" cy="9" r="1" fill="#3498db"/>
+                  <circle cx="5" cy="12" r="1" fill="#3498db"/>
+                  <circle cx="8" cy="12" r="1" fill="#3498db"/>
+                </svg>
+                My Schedule
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <path d="M2 3 Q8 4 8 13 Q4 12 2 12 Z" fill="#ebf5fb" stroke="#2980b9" stroke-width="0.9"/>
+                  <path d="M14 3 Q8 4 8 13 Q12 12 14 12 Z" fill="#ebf5fb" stroke="#2980b9" stroke-width="0.9"/>
+                  <polygon points="11,1 15,5 14,6 10,2" fill="#f1c40f"/>
+                </svg>
+                My Curriculum
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1.5" y="3" width="13" height="9.5" rx="1" fill="#eaeded" stroke="#7f8c8d" stroke-width="1"/>
+                  <polyline points="2,4 8,8.5 14,4" fill="none" stroke="#2980b9" stroke-width="1.2"/>
+                </svg>
+                My Office 365
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <circle cx="6" cy="6" r="3.5" fill="none" stroke="#d4ac0d" stroke-width="2"/>
+                  <path d="M9 7.5 L14 12.5 L12.5 14 L11.5 13 L11.5 11.5 L9.5 11.5" stroke="#b7950b" stroke-width="1.8" fill="none"/>
+                </svg>
+                Reset My Password
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="10" height="13" fill="#fff" stroke="#7f8c8d" stroke-width="1"/>
+                  <line x1="4" y1="4.5" x2="9" y2="4.5" stroke="#95a5a6" stroke-width="1"/>
+                  <line x1="4" y1="7" x2="9" y2="7" stroke="#95a5a6" stroke-width="1"/>
+                  <circle cx="11.5" cy="11.5" r="3" fill="#3498db"/>
+                  <path d="M11.5 10 V13 M10 11.5 H13" stroke="#fff" stroke-width="0.8"/>
+                </svg>
+                Reset Info Update
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Enrollment Group (Manage Course Active) -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-enrollment', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="1" width="11" height="13.5" fill="#fdfefe" stroke="#5d6d7e" stroke-width="1"/>
+              <path d="M4 4 H10 M4 7 H10 M4 10 H8" stroke="#34495e" stroke-width="1"/>
+            </svg>
+            <span class="label">Enrollment</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu" id="grp-enrollment">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="11" height="13.5" fill="#fff" stroke="#7f8c8d" stroke-width="0.8"/>
+                  <rect x="3.5" y="4" width="8" height="6.5" fill="#e74c3c"/>
+                  <text x="4.5" y="8.8" font-size="4" font-weight="bold" fill="#fff">PDF</text>
+                </svg>
+                <span>Online Enrollment User Manual</span>
+              </a>
+            </li>
+            <li class="active-page">
+              <a href="manage-course.html">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <polygon points="8,1 15,4 8,7 1,4" fill="#f5b041" stroke="#b9770e" stroke-width="0.8"/>
+                  <polygon points="1,4 8,7 8,14 1,11" fill="#d68910" stroke="#b9770e" stroke-width="0.8"/>
+                  <polygon points="15,4 8,7 8,14 15,11" fill="#f8c471" stroke="#b9770e" stroke-width="0.8"/>
+                </svg>
+                <span>Manage Course</span>
+              </a>
+            </li>
+            <li>
+              <a href="manage-section.html">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1" y="2" width="14" height="11" fill="#fff" stroke="#2980b9" stroke-width="1"/>
+                  <rect x="1" y="2" width="14" height="3" fill="#3498db"/>
+                  <line x1="5.5" y1="2" x2="5.5" y2="13" stroke="#2980b9" stroke-width="0.8"/>
+                  <line x1="10.5" y1="2" x2="10.5" y2="13" stroke="#2980b9" stroke-width="0.8"/>
+                </svg>
+                <span>Manage Section</span>
+              </a>
+            </li>
+            <li>
+              <a href="payments.html">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="2" width="12" height="12" rx="1.5" fill="#e8f8f5" stroke="#1abc9c" stroke-width="1"/>
+                  <polyline points="4,8 7,11 12,4" fill="none" stroke="#16a085" stroke-width="1.8"/>
+                </svg>
+                <span>Finalization</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="11" height="13.5" fill="#fff" stroke="#7f8c8d" stroke-width="0.8"/>
+                  <rect x="3.5" y="4" width="8" height="6.5" fill="#e74c3c"/>
+                  <text x="4.5" y="8.8" font-size="4" font-weight="bold" fill="#fff">PDF</text>
+                </svg>
+                <span>Course Request Forms</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Bills & Payments -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-bills', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="4" width="12" height="8" rx="1" fill="#f9e79f" stroke="#b7950b" stroke-width="1"/>
+              <circle cx="8" cy="8" r="2" fill="#f1c40f" stroke="#b7950b" stroke-width="0.8"/>
+            </svg>
+            <span class="label">Bills &amp; Payments</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu" id="grp-bills">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <polygon points="8,1 2,5 14,5" fill="#5dade2"/>
+                  <rect x="3" y="6" width="2" height="6" fill="#2e86c1"/>
+                  <rect x="7" y="6" width="2" height="6" fill="#2e86c1"/>
+                  <rect x="11" y="6" width="2" height="6" fill="#2e86c1"/>
+                  <rect x="1.5" y="12" width="13" height="2" fill="#1b4f72"/>
+                </svg>
+                Guidelines for Bukas Installment Plan
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1.5" width="11" height="13" fill="#fff" stroke="#7f8c8d" stroke-width="1"/>
+                  <line x1="4" y1="4.5" x2="10" y2="4.5" stroke="#333" stroke-width="1"/>
+                  <line x1="4" y1="7" x2="10" y2="7" stroke="#333" stroke-width="1"/>
+                  <line x1="4" y1="9.5" x2="10" y2="9.5" stroke="#333" stroke-width="1"/>
+                </svg>
+                Statement of account
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <circle cx="7" cy="8" r="5" fill="#fdfefe" stroke="#34495e" stroke-width="1"/>
+                  <polyline points="7,5 7,8 9.5,8" stroke="#e74c3c" stroke-width="1" fill="none"/>
+                  <circle cx="12" cy="11.5" r="2.5" fill="#f39c12"/>
+                </svg>
+                Payment History
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Services -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-services', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <circle cx="8" cy="8" r="3.5" fill="#bdc3c7" stroke="#34495e" stroke-width="1"/>
+              <path d="M8,1 L8,4 M8,12 L8,15 M1,8 L4,8 M12,8 L15,8" stroke="#34495e" stroke-width="1.8"/>
+            </svg>
+            <span class="label">Services</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu" id="grp-services">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="11" height="13.5" fill="#fff" stroke="#7f8c8d" stroke-width="0.8"/>
+                  <rect x="3.5" y="4" width="8" height="6.5" fill="#e74c3c"/>
+                  <text x="4.5" y="8.8" font-size="4" font-weight="bold" fill="#fff">PDF</text>
+                </svg>
+                Academic Documents
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <path d="M8 2 V10 M5 7 L8 10 L11 7" stroke="#27ae60" stroke-width="1.8" fill="none"/>
+                  <rect x="2" y="12" width="12" height="2" fill="#229954"/>
+                </svg>
+                Downloadable Forms
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Concern/Feedback -->
+        <li class="nav-group">
+          <div class="group-header" onclick="toggleSection('grp-feedback', this)">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <path d="M2 3 Q2 1 4 1 H12 Q14 1 14 3 V9 Q14 11 12 11 H5 L2 14 Z" fill="#fcf3cf" stroke="#f39c12" stroke-width="1"/>
+            </svg>
+            <span class="label">Concern/Feedback</span>
+            <span class="expander minus">-</span>
+          </div>
+          <ul class="sub-menu" id="grp-feedback">
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <rect x="1.5" y="4" width="13" height="9" fill="#fef9e7" stroke="#f39c12" stroke-width="1"/>
+                  <polyline points="1.5,4 8,9 14.5,4" fill="none" stroke="#d68910" stroke-width="1"/>
+                </svg>
+                Email myCounselor
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon-svg" viewBox="0 0 16 16">
+                  <path d="M2 3 Q2 1 4 1 H12 Q14 1 14 3 V9 Q14 11 12 11 H5 L2 14 Z" fill="#fcf3cf" stroke="#f39c12" stroke-width="1"/>
+                </svg>
+                Service Feedback
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Help -->
+        <li class="nav-entry">
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <circle cx="8" cy="8" r="6.5" fill="#f9e79f" stroke="#d4ac0d" stroke-width="1"/>
+              <text x="6" y="11" font-size="8" font-weight="bold" fill="#7d6608">?</text>
+            </svg>
+            <span class="label">Help</span>
+          </a>
+        </li>
+
+        <!-- Sign Out -->
+        <li class="nav-entry">
+          <a href="login.html" data-signout>
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="1" y="2" width="6" height="12" fill="#566573"/>
+              <path d="M7 2 L14 4 V12 L7 14 Z" fill="#a0522d" stroke="#5c3b1e" stroke-width="0.8"/>
+              <circle cx="9" cy="8" r="0.8" fill="#f1c40f"/>
+            </svg>
+            <span class="label">Sign Out</span>
+          </a>
+        </li>
+
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="page-content course-page-wrapper">
+      
+      <!-- Compressed Left Column (~60% width, leaving ~40% blank space on right) -->
+      <div class="course-content-column">
+        
+        <h2 class="main-heading">Manage Course</h2>
+        <div class="term-title">School Year: 2025 &nbsp; Term: 3</div>
+
+        <!-- 1. Top Enrolled Course Table (Auto-selected courses restored) -->
+        <table class="table-top-enrolled" id="selectionSummaryTable">
+          <thead>
+            <tr>
+              <th style="width: 100px;">Course Code</th>
+              <th>Course Title</th>
+              <th style="width: 80px;">No. of Units</th>
+              <th style="width: 70px;">Section</th>
+              <th style="width: 160px;">EQ Course</th>
+              <th style="width: 75px;">Remove</th>
+            </tr>
+          </thead>
+          <tbody id="selectionSummaryBody">
+            <tr data-code="CSS140-1" data-units="3">
+              <td class="center">CSS140-1</td>
+              <td>ARTIFICIAL INTELLIGENCE</td>
+              <td class="center">3</td>
+              <td class="center"></td>
+              <td></td>
+              <td class="center"><input type="checkbox" class="chk-remove-item" /></td>
+            </tr>
+            <tr data-code="ITS142P" data-units="3">
+              <td class="center">ITS142P</td>
+              <td>HUMAN COMPUTER INTERACTION 2</td>
+              <td class="center">3</td>
+              <td class="center"></td>
+              <td></td>
+              <td class="center"><input type="checkbox" class="chk-remove-item" /></td>
+            </tr>
+            <tr data-code="ITS152P" data-units="3">
+              <td class="center">ITS152P</td>
+              <td>SYSTEMS INTEGRATION AND ARCHITECTURE 2</td>
+              <td class="center">3</td>
+              <td class="center"></td>
+              <td></td>
+              <td class="center"><input type="checkbox" class="chk-remove-item" /></td>
+            </tr>
+            <tr data-code="ITS165-1" data-units="3">
+              <td class="center">ITS165-1</td>
+              <td>INFORMATION SECURITY AND ASSURANCE 1</td>
+              <td class="center">3</td>
+              <td class="center"></td>
+              <td></td>
+              <td class="center"><input type="checkbox" class="chk-remove-item" /></td>
+            </tr>
+            <tr data-code="MATH181" data-units="3">
+              <td class="center">MATH181</td>
+              <td>QUANTITATIVE METHODS</td>
+              <td class="center">3</td>
+              <td class="center"></td>
+              <td></td>
+              <td class="center"><input type="checkbox" class="chk-remove-item" /></td>
+            </tr>
+            <tr data-code="ISS181-02" data-units="3">
+              <td class="center">ISS181-02</td>
+              <td>ENTERPRISE DATA MANAGEMENT 2</td>
+              <td class="center">3</td>
+              <td class="center"></td>
+              <td></td>
+              <td class="center"><input type="checkbox" class="chk-remove-item" /></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="tfoot-row">
+              <td colspan="5" style="text-align: center;">
+                Total Unit(s): <span id="unitsDisplay">18</span> &nbsp;&nbsp;&nbsp;&nbsp; Total Hr(s): <span id="hrsDisplay">31.50</span>
+              </td>
+              <td class="center">
+                <button type="button" class="btn-classic-remove" id="removeSelectedBtn" onclick="removeCheckedCourses()">Remove</button>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Top Legend -->
+        <div class="top-legend-text">
+          <strong>LEGEND:</strong> 
+          <span class="legend-bc">BC</span> - Back Course &nbsp;&nbsp;&nbsp;
+          <span class="legend-c">C</span> - Continuing/In Progresse &nbsp;&nbsp;&nbsp;
+          <span class="legend-coursera">COURSERA</span> - W/ Coursera Cetificate<br />
+          <strong>NOTE:</strong> In Progress cannot be removed online. Please see your curricular adviser/s should there be a need to include or remove the course/s.
+        </div>
+
+        <!-- 2. Student Meta Box -->
+        <div class="student-meta-box">
+          Program: <strong>IT</strong> &nbsp;&nbsp;&nbsp;&nbsp;
+          Year Level: <strong>3</strong> &nbsp;&nbsp;&nbsp;&nbsp;
+          Curriculum Year: <strong>2024</strong><br />
+          Specialization: <strong>ENTERPRISE DATA MANAGEMENT</strong>
+        </div>
+
+        <div class="units-wrapper-border">
+          <div class="units-label">Units</div>
+          <div class="units-values">
+            Required: <strong>187</strong> &nbsp;&nbsp;
+            Credited: <strong>Updating...</strong> &nbsp;&nbsp;
+            Passed: <strong>Updating...</strong> &nbsp;&nbsp;
+            Left: <strong>Updating...</strong>
+          </div>
+        </div>
+
+        <!-- TABS & LEGEND -->
+        <div class="curriculum-bar">
+          <div class="curriculum-tabs-group">
+            <span class="curriculum-tab tab-active" id="tab-btn-core" onclick="switchMainTab('tab-core')">Core Courses</span>
+            <span class="curriculum-tab tab-gold" id="tab-btn-electives" onclick="switchMainTab('tab-electives')">Electives</span>
+            <span class="curriculum-tab tab-gold" id="tab-btn-spec" onclick="switchMainTab('tab-spec')">Specialization</span>
+          </div>
+          <div class="curriculum-legend-container">
+            <span>Legend</span>
+            <span class="legend-box-item leg-taken">Taken</span>
+            <span class="legend-box-item leg-in-load">In Current Load</span>
+            <span class="legend-box-item leg-not-yet">NotYetTaken</span>
+            <span class="legend-box-item leg-incomplete">Incomplete</span>
+            <span class="legend-box-item leg-exempted">Exempted/Credited</span>
+          </div>
+        </div>
+
+        <!-- ================= 3. Curriculum Outer Panel ================= -->
+        <div class="curriculum-outer-panel">
+          
+          <!-- TAB 1: CORE COURSES (Contains Year 1 - 5) -->
+          <div id="tab-core" class="main-tab-panel is-active">
+            
+            <div class="taken-year-bar" id="takenYearNav">
+              Taken Year 
+              <a onclick="showYear('yr-1', this)">1st</a>
+              <a onclick="showYear('yr-2', this)">2nd</a>
+              <span class="active-year-strong" onclick="showYear('yr-3', this)">3rd</span>
+              <a onclick="showYear('yr-4', this)">4th</a>
+              <a onclick="showYear('yr-5', this)">5th</a>
+            </div>
+
+            <!-- YEAR 1 -->
+            <div id="yr-1" class="year-panel">
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="CSS121P">
+                    <td class="cell-center text-taken">1</td>
+                    <td class="cell-center text-taken">1</td>
+                    <td class="code-cell text-taken">CSS121P</td>
+                    <td class="title-cell text-taken">COMPUTER PROGRAMMING 1</td>
+                    <td class="cell-center text-taken">2.3</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="FW01-2">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">FW01-2</td>
+                    <td class="title-cell text-taken">PHYSICAL ACTIVITIES TOWARD HEALTH AND FITNESS 1 (PATHFIT 1): MOVEMENT COMPETENCY TRAINING</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td></td><td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GED101">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GED101</td>
+                    <td class="title-cell text-taken">UNDERSTANDING THE SELF</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GED103">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GED103</td>
+                    <td class="title-cell text-taken">READINGS IN PHILIPPINE HISTORY</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS100">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-exempted">ITS100</td>
+                    <td class="title-cell text-exempted">INTRODUCTION TO INFORMATION TECHNOLOGY</td>
+                    <td class="cell-center text-exempted">4.5</td>
+                    <td class="cell-center text-exempted">-</td>
+                    <td class="cell-center text-exempted">3</td>
+                    <td></td><td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="MATH165">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">MATH165</td>
+                    <td class="title-cell text-taken">COLLEGE ALGEBRA WITH ANALYTIC GEOMETRY</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="NSTP001">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">NSTP001</td>
+                    <td class="title-cell text-taken">NATIONAL SERVICE TRAINING PROGRAM GENERAL MODULE</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td></td><td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">23.3</td>
+                    <td class="cell-center">9</td>
+                    <td class="cell-center">19</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <!-- Term 2 -->
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="CSS122P">
+                    <td class="cell-center text-taken">1</td><td class="cell-center text-taken">2</td>
+                    <td class="code-cell text-taken">CSS122P</td>
+                    <td class="title-cell text-taken">COMPUTER PROGRAMMING 2</td>
+                    <td class="cell-center text-taken">2.3</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">CSS121P</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="CWTS001">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">CWTS001</td>
+                    <td class="title-cell text-taken">CIVIC WELFARE TRAINING SERVICE 1</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td class="text-taken">NSTP001</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="FW02-2">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">FW02-2</td>
+                    <td class="title-cell text-taken">PHYSICAL ACTIVITIES TOWARD HEALTH AND FITNESS 2 (PATHFIT 2): EXERCISE-BASED FITNESS ACTIVITIES</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td class="text-taken">FW01-2</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GED104">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GED104</td>
+                    <td class="title-cell text-taken">SCIENCE, TECHNOLOGY AND SOCIETY</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GED105">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GED105</td>
+                    <td class="title-cell text-taken">THE CONTEMPORARY WORLD</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS110P">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS110P</td>
+                    <td class="title-cell text-taken">COMPUTER HARDWARE FUNDAMENTALS</td>
+                    <td class="cell-center text-taken">2.3</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS121-1L">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS121-1L</td>
+                    <td class="title-cell text-taken">WEB SYSTEMS AND TECHNOLOGIES 1 LABORATORY</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">1</td>
+                    <td class="text-taken">CSS121P</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="MATH170">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">MATH170</td>
+                    <td class="title-cell text-taken">LINEAR ALGEBRA WITH COMPUTER APPLICATIONS</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">MATH165</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">21.1</td>
+                    <td class="cell-center">18</td>
+                    <td class="cell-center">20</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <!-- Term 3 -->
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="CSS130-1">
+                    <td class="cell-center text-taken">1</td><td class="cell-center text-taken">3</td>
+                    <td class="code-cell text-taken">CSS130-1</td>
+                    <td class="title-cell text-taken">DATA STRUCTURES AND ALGORITHMS</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">CSS121P</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="CWTS002">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">CWTS002</td>
+                    <td class="title-cell text-taken">CIVIC WELFARE TRAINING SERVICE 2</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td class="text-taken">CWTS001</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="FW03-2">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">FW03-2</td>
+                    <td class="title-cell text-taken">PHYSICAL ACTIVITIES TOWARD HEALTH AND FITNESS 3 (PATHFIT 3): DANCE / MARTIAL ARTS</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td class="text-taken">FW02-2</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GED106">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GED106</td>
+                    <td class="title-cell text-taken">PURPOSIVE COMMUNICATION</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GED107">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GED107</td>
+                    <td class="title-cell text-taken">ETHICS</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS131P">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS131P</td>
+                    <td class="title-cell text-taken">INFORMATION MANAGEMENT</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">CSS122P</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS161-1L">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS161-1L</td>
+                    <td class="title-cell text-taken">DATA COMMUNICATION AND NETWORKING FUNDAMENTALS</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">9</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td class="text-taken">CSS121P</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="MATH174">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">MATH174</td>
+                    <td class="title-cell text-taken">DIFFERENTIAL AND INTEGRAL CALCULUS</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">MATH165</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">24</td>
+                    <td class="cell-center">18</td>
+                    <td class="cell-center">21</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <!-- YEAR 2 -->
+            <div id="yr-2" class="year-panel">
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="CSS123P">
+                    <td class="cell-center text-taken">2</td><td class="cell-center text-taken">1</td>
+                    <td class="code-cell text-taken">CSS123P</td>
+                    <td class="title-cell text-taken">COMPUTER PROGRAMMING 3</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">ITS131P</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="CSS131-1">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">CSS131-1</td>
+                    <td class="title-cell text-taken">DISCRETE MATHEMATICS 1</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">CSS130-1</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GED108">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GED108</td>
+                    <td class="title-cell text-taken">ART APPRECIATION</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ISS120">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ISS120</td>
+                    <td class="title-cell text-taken">INFORMATION SYSTEMS AND BUSINESS PROCESSES</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">ITS100</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS162-1L">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS162-1L</td>
+                    <td class="title-cell text-taken">DATA COMMUNICATION AND NETWORKING ESSENTIALS</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">9</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td class="text-taken">ITS161-1L</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <!-- MATH181 auto-selected in green -->
+                  <tr data-curr-code="MATH181">
+                    <td class="cell-center in-load-green"></td><td class="cell-center in-load-green"></td>
+                    <td class="code-cell in-load-green">MATH181</td>
+                    <td class="title-cell in-load-green">QUANTITATIVE METHODS</td>
+                    <td class="cell-center in-load-green">4.5</td>
+                    <td class="cell-center in-load-green">-</td>
+                    <td class="cell-center in-load-green">3</td>
+                    <td class="in-load-green">MATH170</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="PCC150">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">PCC150</td>
+                    <td class="title-cell text-taken">PROFESSIONAL COMMUNICATIONS COURSE</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">25.5</td>
+                    <td class="cell-center">13.5</td>
+                    <td class="cell-center">20</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <!-- Term 2 -->
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="DSS110">
+                    <td class="cell-center text-taken">2</td><td class="cell-center text-taken">2</td>
+                    <td class="code-cell text-taken">DSS110</td>
+                    <td class="title-cell text-taken">INTRODUCTION TO DATA SCIENCE</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">ITS131P</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ENV121">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ENV121</td>
+                    <td class="title-cell text-taken">ENVIRONMENTAL SCIENCE AND SUSTAINABILITY</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GED102">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GED102</td>
+                    <td class="title-cell text-taken">MATHEMATICS IN THE MODERN WORLD</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GED110">
+                    <td class="cell-center text-taken"></td><td class="cell-center text-taken"></td>
+                    <td class="code-cell text-taken">GED110</td>
+                    <td class="title-cell text-taken">PEOPLE AND EARTH'S ECOSYSTEM</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GEE120">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GEE120</td>
+                    <td class="title-cell text-taken">GE ELECTIVE</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="GEE130">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">GEE130</td>
+                    <td class="title-cell text-taken">GE ELECTIVE</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td></td><td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS112P">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS112P</td>
+                    <td class="title-cell text-taken">COMPUTER ARCHITECTURE AND ORGANIZATION</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">ITS110P</td>
+                    <td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS163-1L">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS163-1L</td>
+                    <td class="title-cell text-taken">DATA COMMUNICATION AND NETWORKING CORE</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">9</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td class="text-taken">ITS162-1L</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">30</td>
+                    <td class="cell-center">13.5</td>
+                    <td class="cell-center">23</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <!-- Term 3 -->
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="FW04-2">
+                    <td class="cell-center text-taken">2</td><td class="cell-center text-taken">3</td>
+                    <td class="code-cell text-taken">FW04-2</td>
+                    <td class="title-cell text-taken">PHYSICAL ACTIVITIES TOWARD HEALTH AND FITNESS 4 (PATHFIT 4): GROUP EXERCISE</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">2</td>
+                    <td class="text-taken">FW03-2</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS122P">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS122P</td>
+                    <td class="title-cell text-taken">WEB SYSTEMS AND TECHNOLOGIES 2</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">ITS121-1L, ITS131P</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS132P">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS132P</td>
+                    <td class="title-cell text-taken">DATA WAREHOUSING AND DATA MINING</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">DSS110, ITS131P</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS141-1">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS141-1</td>
+                    <td class="title-cell text-taken">HUMAN-COMPUTER INTERACTION 1</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">-</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">CSS123P</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS151P">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-taken">ITS151P</td>
+                    <td class="title-cell text-taken">SYSTEMS INTEGRATION AND ARCHITECTURE 1</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="cell-center text-taken">4.5</td>
+                    <td class="cell-center text-taken">3</td>
+                    <td class="text-taken">CSS123P, ISS120</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">16.5</td>
+                    <td class="cell-center">13.5</td>
+                    <td class="cell-center">14</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <!-- YEAR 3 -->
+            <div id="yr-3" class="year-panel is-active">
+              <!-- Term 1 -->
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- CSS140-1 in-load-green -->
+                  <tr data-curr-code="CSS140-1">
+                    <td class="cell-center in-load-green">3</td><td class="cell-center in-load-green">1</td>
+                    <td class="code-cell in-load-green">CSS140-1</td>
+                    <td class="title-cell in-load-green">ARTIFICIAL INTELLIGENCE</td>
+                    <td class="cell-center in-load-green">4.5</td>
+                    <td class="cell-center in-load-green">-</td>
+                    <td class="cell-center in-load-green">3</td>
+                    <td class="in-load-green">CSS130-1</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ISS160">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell text-not-yet">ISS160</td>
+                    <td class="title-cell text-not-yet">PROJECT MANAGEMENT</td>
+                    <td class="cell-center">4.5</td>
+                    <td class="cell-center">-</td>
+                    <td class="cell-center">3</td>
+                    <td class="text-not-yet">CSS123P</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"><input type="checkbox" class="chk-add-course" value="ISS160" data-title="PROJECT MANAGEMENT" data-units="3" /></td>
+                  </tr>
+                  <!-- ITS142P in-load-green -->
+                  <tr data-curr-code="ITS142P">
+                    <td class="cell-center in-load-green"></td><td class="cell-center in-load-green"></td>
+                    <td class="code-cell in-load-green">ITS142P</td>
+                    <td class="title-cell in-load-green">HUMAN COMPUTER INTERACTION 2</td>
+                    <td class="cell-center in-load-green">3</td>
+                    <td class="cell-center in-load-green">4.5</td>
+                    <td class="cell-center in-load-green">3</td>
+                    <td class="in-load-green">ITS141-1</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <!-- ITS152P in-load-green -->
+                  <tr data-curr-code="ITS152P">
+                    <td class="cell-center in-load-green"></td><td class="cell-center in-load-green"></td>
+                    <td class="code-cell in-load-green">ITS152P</td>
+                    <td class="title-cell in-load-green">SYSTEMS INTEGRATION AND ARCHITECTURE 2</td>
+                    <td class="cell-center in-load-green">3</td>
+                    <td class="cell-center in-load-green">4.5</td>
+                    <td class="cell-center in-load-green">3</td>
+                    <td class="in-load-green">ITS151P</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                  <!-- ITS165-1 in-load-green -->
+                  <tr data-curr-code="ITS165-1">
+                    <td class="cell-center in-load-green"></td><td class="cell-center in-load-green"></td>
+                    <td class="code-cell in-load-green">ITS165-1</td>
+                    <td class="title-cell in-load-green">INFORMATION SECURITY AND ASSURANCE 1</td>
+                    <td class="cell-center in-load-green">4.5</td>
+                    <td class="cell-center in-load-green">-</td>
+                    <td class="cell-center in-load-green">3</td>
+                    <td class="in-load-green">ITS131P, ITS161-1L</td>
+                    <td></td><td></td>
+                    <td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">19.5</td>
+                    <td class="cell-center">9</td>
+                    <td class="cell-center">15</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <!-- Term 2 (Locked) -->
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="ITS120P">
+                    <td class="cell-center">3</td><td class="cell-center">2</td>
+                    <td class="code-cell">ITS120P</td>
+                    <td class="title-cell">APPLICATION DEVELOPMENT AND EMERGING TECHNOLOGIES</td>
+                    <td class="cell-center">3</td><td class="cell-center">4.5</td><td class="cell-center">3</td>
+                    <td>CSS123P</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS150P">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">ITS150P</td>
+                    <td class="title-cell">OPERATING SYSTEMS</td>
+                    <td class="cell-center">3</td><td class="cell-center">4.5</td><td class="cell-center">3</td>
+                    <td>ITS112P</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS166P">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">ITS166P</td>
+                    <td class="title-cell">INFORMATION SECURITY AND ASSURANCE 2</td>
+                    <td class="cell-center">3</td><td class="cell-center">4.5</td><td class="cell-center">3</td>
+                    <td>ITS165-1</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="RZL110">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">RZL110</td>
+                    <td class="title-cell">THE LIFE AND WORKS OF RIZAL</td>
+                    <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">13.5</td><td class="cell-center">13.5</td><td class="cell-center">12</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <!-- Term 3 (Locked) -->
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="CSS153P">
+                    <td class="cell-center">3</td><td class="cell-center">3</td>
+                    <td class="code-cell">CSS153P</td>
+                    <td class="title-cell">SOFTWARE QUALITY</td>
+                    <td class="cell-center">3</td><td class="cell-center">4.5</td><td class="cell-center">3</td>
+                    <td>ITS142P</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="IE103-2">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">IE103-2</td>
+                    <td class="title-cell">TECHNOPRENEURSHIP 101</td>
+                    <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS109-1">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">ITS109-1</td>
+                    <td class="title-cell">RESEARCH METHODS IN INFORMATION TECHNOLOGY</td>
+                    <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                    <td>ITS152P</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS153P">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">ITS153P</td>
+                    <td class="title-cell">SYSTEMS ADMINISTRATION AND MAINTENANCE</td>
+                    <td class="cell-center">3</td><td class="cell-center">4.5</td><td class="cell-center">3</td>
+                    <td>ITS152P, ITS163-1L</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">15</td><td class="cell-center">9</td><td class="cell-center">12</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <!-- Term 4 (Locked) -->
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="ITS105-1">
+                    <td class="cell-center">3</td><td class="cell-center">4</td>
+                    <td class="code-cell">ITS105-1</td>
+                    <td class="title-cell">SOCIAL AND PROFESSIONAL ISSUES</td>
+                    <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                    <td>CSS123P, GED107</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS199-1R">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">ITS199-1R</td>
+                    <td class="title-cell">PRACTICUM 1</td>
+                    <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS200-01">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">ITS200-01</td>
+                    <td class="title-cell">THESIS 1</td>
+                    <td class="cell-center">1.5</td><td class="cell-center">-</td><td class="cell-center">1</td>
+                    <td>ITS109-1</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">10.5</td><td class="cell-center">0</td><td class="cell-center">7</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <!-- Add Course button aligned to the right side -->
+              <div class="under-table-action-bar">
+                <button type="button" class="btn-submit-action" onclick="addCheckedCourses()">
+                  Add Course
+                </button>
+              </div>
+
+            </div>
+
+            <!-- YEAR 4 -->
+            <div id="yr-4" class="year-panel">
+              <table class="curriculum-exact-table">
+                <thead>
+                  <tr>
+                    <th style="width: 34px;">Yr</th>
+                    <th style="width: 40px;">Term</th>
+                    <th style="width: 78px;">Course<br>Code</th>
+                    <th>Course Title</th>
+                    <th style="width: 38px;">Lec<br>Hrs</th>
+                    <th style="width: 38px;">Lab<br>Hrs</th>
+                    <th style="width: 44px;">Credit<br>Units</th>
+                    <th style="width: 135px;">Pre-Requisites</th>
+                    <th style="width: 95px;">Co-Requisites</th>
+                    <th style="width: 70px;">Paired<br>Courses</th>
+                    <th style="width: 32px;">Add</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-curr-code="ITS198F">
+                    <td class="cell-center">4</td><td class="cell-center">1</td>
+                    <td class="code-cell">ITS198F</td>
+                    <td class="title-cell">CAREER DEVELOPMENT AND SEMINAR IN IT</td>
+                    <td class="cell-center">-</td><td class="cell-center">4.5</td><td class="cell-center">1</td>
+                    <td>FOR GRADUATING STUDENTS ONLY</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS199-2R">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">ITS199-2R</td>
+                    <td class="title-cell">PRACTICUM 2</td>
+                    <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                    <td>ITS199-1R</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="ITS200-02">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">ITS200-02</td>
+                    <td class="title-cell">THESIS 2</td>
+                    <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">1</td>
+                    <td>ITS200-01</td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                  <tr data-curr-code="SGE100X">
+                    <td class="cell-center"></td><td class="cell-center"></td>
+                    <td class="code-cell">SGE100X</td>
+                    <td class="title-cell">STUDENT GLOBAL EXPERIENCE</td>
+                    <td class="cell-center">-</td><td class="cell-center">-</td><td class="cell-center">(0)</td>
+                    <td></td><td></td><td></td><td class="cell-center add-slot"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="total-divider-row">
+                    <td></td><td></td><td></td>
+                    <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                    <td class="cell-center">9</td><td class="cell-center">4.5</td><td class="cell-center">5</td>
+                    <td></td><td></td><td></td><td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <!-- YEAR 5 -->
+            <div id="yr-5" class="year-panel">
+              <div class="empty-term-notice">
+                No prescribed curriculum courses found for Year 5.
+              </div>
+            </div>
+
+          </div>
+
+          <!-- TAB 2: ELECTIVES -->
+          <div id="tab-electives" class="main-tab-panel">
+            <div class="curriculum-sub-meta-bar">
+              <div>
+                <select class="curriculum-select-styled">
+                  <option>ITS ELECTIVES</option>
+                </select>
+              </div>
+              <div style="font-size: 10.5px;">
+                Required Units : <strong>Updating...</strong> &nbsp;&nbsp;
+                Units Passed: <strong>Updating...</strong> &nbsp;&nbsp;
+                Units Left: <strong>Updating...</strong>
+              </div>
+            </div>
+
+            <table class="curriculum-exact-table">
+              <thead>
+                <tr>
+                  <th style="width: 34px;">Yr</th>
+                  <th style="width: 40px;">Term</th>
+                  <th style="width: 78px;">Course<br>Code</th>
+                  <th>Course Title</th>
+                  <th style="width: 38px;">Lec<br>Hrs</th>
+                  <th style="width: 38px;">Lab<br>Hrs</th>
+                  <th style="width: 44px;">Credit<br>Units</th>
+                  <th style="width: 135px;">Pre-Requisites</th>
+                  <th style="width: 95px;">Co-Requisites</th>
+                  <th style="width: 70px;">Paired<br>Courses</th>
+                  <th style="width: 32px;">Add</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-curr-code="CSS171-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">CSS171-1</td>
+                  <td class="title-cell">GRAPHICS AND VISUAL COMPUTING</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>CSS123P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="CSS172-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">CSS172-1</td>
+                  <td class="title-cell">PATTERN RECOGNITION</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>CSS123P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ECS176-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ECS176-1</td>
+                  <td class="title-cell">INTRODUCTION TO GAME PROGRAMMING</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>CSS123P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ISS171-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ISS171-1</td>
+                  <td class="title-cell">SUPPLY CHAIN MANAGEMENT</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>ITS122P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ISS172-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ISS172-1</td>
+                  <td class="title-cell">CUSTOMER RELATIONS MANAGEMENT</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>ITS131P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ISS173-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ISS173-1</td>
+                  <td class="title-cell">ESSENTIAL OF SAS</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>CSS123P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ISS174-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ISS174-1</td>
+                  <td class="title-cell">IT AUDIT AND CONTROL</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>ITS131P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ITS170-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ITS170-1</td>
+                  <td class="title-cell">IT INFRASTRUCTURE LIBRARY FOUNDATION COURSE</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>ITS131P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ITS171-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ITS171-1</td>
+                  <td class="title-cell">FUNDAMENTALS OF SAP</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>ITS131P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ITS172-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ITS172-1</td>
+                  <td class="title-cell">MOBILE APPLICATION DEVELOPMENT</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>CSS123P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ITS173-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ITS173-1</td>
+                  <td class="title-cell">EMBEDDED SYSTEMS</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>CSS123P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ITS174-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ITS174-1</td>
+                  <td class="title-cell">INTERNET OF THINGS</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>CSS123P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ITS175-1">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ITS175-1</td>
+                  <td class="title-cell">CLOUD COMPUTING</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td></td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ITS176">
+                  <td class="cell-center">3</td><td class="cell-center">4</td>
+                  <td class="code-cell">ITS176</td>
+                  <td class="title-cell">BLOCKCHAIN TECHNOLOGY</td>
+                  <td class="cell-center">4.5</td><td class="cell-center">-</td><td class="cell-center">3</td>
+                  <td>CSS123P</td><td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="total-divider-row">
+                  <td></td><td></td><td></td>
+                  <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                  <td class="cell-center">63</td>
+                  <td class="cell-center">0</td>
+                  <td class="cell-center">42</td>
+                  <td></td><td></td><td></td><td></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <div class="under-table-action-bar">
+              <button type="button" class="btn-submit-action" onclick="addCheckedCourses()">
+                Add Course
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 3: SPECIALIZATION -->
+          <div id="tab-spec" class="main-tab-panel">
+            <div class="curriculum-sub-meta-bar" style="justify-content: flex-end;">
+              <div style="font-size: 10.5px;">
+                Required Units: <strong>Updating...</strong> &nbsp;&nbsp;
+                Units Credited: <strong>Updating...</strong> &nbsp;&nbsp;
+                Units Left: <strong>Updating...</strong>
+              </div>
+            </div>
+
+            <table class="curriculum-exact-table">
+              <thead>
+                <tr>
+                  <th style="width: 34px;">Yr</th>
+                  <th style="width: 40px;">Term</th>
+                  <th style="width: 78px;">Course<br>Code</th>
+                  <th>Course Title</th>
+                  <th style="width: 38px;">Lec<br>Hrs</th>
+                  <th style="width: 38px;">Lab<br>Hrs</th>
+                  <th style="width: 44px;">Credit<br>Units</th>
+                  <th style="width: 135px;">Pre-Requisites</th>
+                  <th style="width: 95px;">Co-Requisites</th>
+                  <th style="width: 70px;">Paired<br>Courses</th>
+                  <th style="width: 32px;">Add</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-curr-code="ISS181-01" data-spec-seq="1">
+                  <td class="cell-center text-taken">2</td><td class="cell-center text-taken">3</td>
+                  <td class="code-cell text-taken">ISS181-01</td>
+                  <td class="title-cell text-taken">ENTERPRISE DATA MANAGEMENT 1</td>
+                  <td class="cell-center text-taken">4.5</td>
+                  <td class="cell-center text-taken">-</td>
+                  <td class="cell-center text-taken">3</td>
+                  <td class="text-taken">ITS131P</td>
+                  <td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <!-- ISS181-02 auto-selected in-load-green -->
+                <tr data-curr-code="ISS181-02" data-spec-seq="2">
+                  <td class="cell-center in-load-green">3</td><td class="cell-center in-load-green">1</td>
+                  <td class="code-cell in-load-green">ISS181-02</td>
+                  <td class="title-cell in-load-green">ENTERPRISE DATA MANAGEMENT 2</td>
+                  <td class="cell-center in-load-green">4.5</td>
+                  <td class="cell-center in-load-green">-</td>
+                  <td class="cell-center in-load-green">3</td>
+                  <td class="in-load-green">ISS181-01</td>
+                  <td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+                <tr data-curr-code="ISS181-03" data-spec-seq="3">
+                  <td class="cell-center">3</td><td class="cell-center">2</td>
+                  <td class="code-cell text-not-yet">ISS181-03</td>
+                  <td class="title-cell text-not-yet">ENTERPRISE DATA MANAGEMENT 3</td>
+                  <td class="cell-center">4.5</td>
+                  <td class="cell-center">-</td>
+                  <td class="cell-center">3</td>
+                  <td>ISS181-02</td>
+                  <td></td><td></td>
+                  <td class="cell-center add-slot"><input type="checkbox" class="chk-add-course" value="ISS181-03" data-title="ENTERPRISE DATA MANAGEMENT 3" data-units="3" data-is-spec="true" /></td>
+                </tr>
+                <tr data-curr-code="ISS181-04" data-spec-seq="4">
+                  <td class="cell-center">3</td><td class="cell-center">3</td>
+                  <td class="code-cell text-not-yet">ISS181-04</td>
+                  <td class="title-cell text-not-yet">ENTERPRISE DATA MANAGEMENT 4</td>
+                  <td class="cell-center">4.5</td>
+                  <td class="cell-center">-</td>
+                  <td class="cell-center">3</td>
+                  <td>ISS181-03</td>
+                  <td></td><td></td>
+                  <td class="cell-center add-slot"></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="total-divider-row">
+                  <td></td><td></td><td></td>
+                  <td style="text-align: right; padding-right: 12px;">TOTAL</td>
+                  <td class="cell-center">18</td>
+                  <td class="cell-center">0</td>
+                  <td class="cell-center">12</td>
+                  <td></td><td></td><td></td><td></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <div class="under-table-action-bar">
+              <button type="button" class="btn-submit-action" onclick="addCheckedCourses()">
+                Add Course
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <!-- End Curriculum Outer Panel -->
+
+      </div>
+      <!-- End Compressed Column -->
+
+    </main>
+  </div>
+
+  <!-- Bottom Dark Red Footer -->
+  <footer class="bottom-footer">
+    Copyright &copy; 2001-2026. All rights reserved. Mapúa University<br />
+    <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a><br />
+    <span>helpdesk@mapua.edu.ph</span>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/enrollment-state.js"></script>
+  <script src="../js/payment-flow.js"></script>
+  <script>
+    window.myMapuaPaymentFlow.setActiveGroup('grp-enrollment');
+
+    function toggleSection(id, headerEl) {
+      const sub = document.getElementById(id);
+      const expander = headerEl.querySelector('.expander');
+      if (sub.classList.contains('is-hidden')) {
+        sub.classList.remove('is-hidden');
+        expander.textContent = '-';
+        expander.className = 'expander minus';
+      } else {
+        sub.classList.add('is-hidden');
+        expander.textContent = '+';
+        expander.className = 'expander plus';
+      }
+    }
+
+    // Main Tab Switching: Core Courses | Electives | Specialization
+    function switchMainTab(tabId) {
+      document.querySelectorAll('.main-tab-panel').forEach(p => p.classList.remove('is-active'));
+      const activePanel = document.getElementById(tabId);
+      if (activePanel) activePanel.classList.add('is-active');
+
+      const tabs = [
+        { id: 'tab-core', btn: 'tab-btn-core' },
+        { id: 'tab-electives', btn: 'tab-btn-electives' },
+        { id: 'tab-spec', btn: 'tab-btn-spec' }
+      ];
+
+      tabs.forEach(t => {
+        const el = document.getElementById(t.btn);
+        if (t.id === tabId) {
+          el.className = 'curriculum-tab tab-active';
+        } else {
+          el.className = 'curriculum-tab tab-gold';
+        }
+      });
+    }
+
+    // Core Courses Year Switching (1st, 2nd, 3rd, 4th, 5th)
+    function showYear(yearId, clickedLink) {
+      document.querySelectorAll('.year-panel').forEach(p => p.classList.remove('is-active'));
+      const targetPanel = document.getElementById(yearId);
+      if (targetPanel) targetPanel.classList.add('is-active');
+
+      const navContainer = document.getElementById('takenYearNav');
+      const yearMap = [
+        { id: 'yr-1', label: '1st' },
+        { id: 'yr-2', label: '2nd' },
+        { id: 'yr-3', label: '3rd' },
+        { id: 'yr-4', label: '4th' },
+        { id: 'yr-5', label: '5th' }
+      ];
+
+      let navHtml = 'Taken Year ';
+      yearMap.forEach(item => {
+        if (item.id === yearId) {
+          navHtml += `<span class="active-year-strong" onclick="showYear('${item.id}', this)">${item.label}</span> `;
+        } else {
+          navHtml += `<a onclick="showYear('${item.id}', this)">${item.label}</a> `;
+        }
+      });
+      navContainer.innerHTML = navHtml;
+    }
+
+    function recalculateLoad() {
+      const rows = document.querySelectorAll("#selectionSummaryBody tr[data-units]");
+      let totalUnits = 0;
+      rows.forEach(r => {
+        totalUnits += parseInt(r.getAttribute("data-units") || 0, 10);
+      });
+      const displayEl = document.getElementById("unitsDisplay");
+      if (displayEl) displayEl.textContent = totalUnits;
+      
+      const hrsEl = document.getElementById("hrsDisplay");
+      if (hrsEl) {
+        hrsEl.textContent = (totalUnits * 1.75).toFixed(2);
+      }
+      return totalUnits;
+    }
+
+    function renderSelectionSummary() {
+      const tbody = document.getElementById("selectionSummaryBody");
+      tbody.innerHTML = "";
+
+      window.myMapuaEnrollment.getCourses().forEach(course => {
+        const row = document.createElement("tr");
+        row.dataset.code = course.code;
+        row.dataset.units = course.units;
+        [course.code, course.title, course.units, course.section || "", ""].forEach((value, index) => {
+          const cell = document.createElement("td");
+          cell.textContent = value;
+          if (index === 0 || index === 2 || index === 3 || index === 5) cell.className = "center";
+          row.appendChild(cell);
+        });
+        const removeCell = document.createElement("td");
+        removeCell.className = "center";
+        removeCell.innerHTML = '<input type="checkbox" class="chk-remove-item" />';
+        row.appendChild(removeCell);
+        tbody.appendChild(row);
+      });
+    }
+
+    function saveSelectionSummary() {
+      const courses = Array.from(document.querySelectorAll("#selectionSummaryBody tr[data-code]")).map(row => ({
+        code: row.dataset.code,
+        title: row.children[1].textContent.trim(),
+        units: Number(row.dataset.units),
+        section: row.children[3].textContent.trim()
+      }));
+      return window.myMapuaEnrollment.saveCourses(courses);
+    }
+
+    // Count how many specialization courses are currently loaded
+    function countActiveSpecialization() {
+      const specCodes = ["ISS181-01", "ISS181-02", "ISS181-03", "ISS181-04"];
+      let count = 0;
+      document.querySelectorAll("#selectionSummaryBody tr[data-code]").forEach(tr => {
+        if (specCodes.includes(tr.getAttribute("data-code"))) count++;
+      });
+      return count;
+    }
+
+    // Add Checked Courses with 20 Units Cap & Specialization Rules
+    function addCheckedCourses() {
+      const checkedBoxes = Array.from(document.querySelectorAll(".chk-add-course:checked"));
+      if (checkedBoxes.length === 0) {
+        window.myMapuaEnrollment.showNotice("No course was added. Select at least one course first.", "error");
+        return;
+      }
+
+      let currentUnits = recalculateLoad();
+      let pendingUnits = 0;
+      checkedBoxes.forEach(chk => {
+        pendingUnits += parseInt(chk.getAttribute("data-units") || 0, 10);
+      });
+
+      // Total units must not exceed 20
+      if (currentUnits + pendingUnits > 20) {
+        window.myMapuaEnrollment.showNotice(`No course was added. The 20-unit limit would be exceeded (${currentUnits + pendingUnits} units).`, "error");
+        return;
+      }
+
+      // Only 2 courses in specialization can be selected total
+      let activeSpecCount = countActiveSpecialization();
+      let newSpecCount = 0;
+      checkedBoxes.forEach(chk => {
+        if (chk.getAttribute("data-is-spec") === "true") newSpecCount++;
+      });
+      if (activeSpecCount + newSpecCount > 2) {
+        window.myMapuaEnrollment.showNotice("No course was added. A maximum of 2 specialization courses may be enrolled at once.", "error");
+        return;
+      }
+
+      const tbody = document.getElementById("selectionSummaryBody");
+      const addedCodes = [];
+
+      checkedBoxes.forEach(chk => {
+        const code = chk.value;
+        const title = chk.getAttribute("data-title");
+        const units = chk.getAttribute("data-units");
+
+        // Prevent duplicate addition
+        const alreadyExists = Array.from(tbody.querySelectorAll("tr")).some(tr => tr.getAttribute("data-code") === code);
+        if (!alreadyExists) {
+          const newRow = document.createElement("tr");
+          newRow.setAttribute("data-code", code);
+          newRow.setAttribute("data-units", units);
+          newRow.innerHTML = `
+            <td class="center">${code}</td>
+            <td>${title}</td>
+            <td class="center">${units}</td>
+            <td class="center"></td>
+            <td></td>
+            <td class="center"><input type="checkbox" class="chk-remove-item" /></td>
+          `;
+          tbody.appendChild(newRow);
+          addedCodes.push(code);
+
+          // Update curriculum row: Turn Green across ALL cells and remove checkbox
+          updateCurriculumRowState(code, true);
+        }
+        chk.checked = false;
+      });
+
+      recalculateLoad();
+      syncSpecializationSequence();
+      const saved = saveSelectionSummary();
+      if (addedCodes.length === 0) {
+        window.myMapuaEnrollment.showNotice("No course was added. The selected courses are already in your current load.", "error");
+      } else if (saved) {
+        window.myMapuaEnrollment.showNotice(`Course${addedCodes.length === 1 ? "" : "s"} added successfully: ${addedCodes.join(", ")}.`);
+      } else {
+        window.myMapuaEnrollment.showNotice(`Added ${addedCodes.join(", ")} for this session, but browser storage is unavailable so the change could not be saved.`, "error");
+      }
+    }
+
+    // Removing course changes all cells back to black and restores the checkbox
+    function removeCheckedCourses() {
+      const checkedRemoves = Array.from(document.querySelectorAll(".chk-remove-item:checked"));
+      if (checkedRemoves.length === 0) {
+        window.myMapuaEnrollment.showNotice("No course was removed. Select at least one course first.", "error");
+        return;
+      }
+
+      const removedCodes = checkedRemoves.map(chk => chk.closest("tr").dataset.code);
+      checkedRemoves.forEach(chk => {
+        const row = chk.closest("tr");
+        const code = row.getAttribute("data-code");
+        row.remove();
+
+        // Restore curriculum row: revert all cells to black & re-insert Add checkbox
+        updateCurriculumRowState(code, false);
+      });
+
+      recalculateLoad();
+      syncSpecializationSequence();
+      if (saveSelectionSummary()) {
+        window.myMapuaEnrollment.showNotice(`Course${removedCodes.length === 1 ? "" : "s"} removed successfully: ${removedCodes.join(", ")}.`);
+      } else {
+        window.myMapuaEnrollment.showNotice(`Removed ${removedCodes.join(", ")} for this session, but browser storage is unavailable so the change could not be saved.`, "error");
+      }
+    }
+
+    // Toggle color & checkbox across ALL cells in the row between Green (In Load) and Black (Not Yet Taken)
+    function updateCurriculumRowState(code, isInLoad) {
+      const targetRow = document.querySelector(`tr[data-curr-code="${code}"]`);
+      if (!targetRow) return;
+
+      const cells = targetRow.querySelectorAll('td:not(.add-slot)');
+      const addSlot = targetRow.querySelector('.add-slot');
+
+      if (isInLoad) {
+        cells.forEach(td => {
+          td.classList.remove('text-not-yet');
+          td.classList.add('in-load-green');
+        });
+        if (addSlot) addSlot.innerHTML = '';
+      } else {
+        cells.forEach(td => {
+          td.classList.remove('in-load-green');
+          td.classList.add('text-not-yet');
+        });
+        if (addSlot) {
+          const titleCell = targetRow.querySelector('.title-cell');
+          const title = titleCell ? titleCell.textContent.trim() : '';
+          const units = targetRow.children[6] ? targetRow.children[6].textContent.trim() : '3';
+          const isSpec = code.startsWith("ISS181-") ? 'data-is-spec="true"' : '';
+          addSlot.innerHTML = `<input type="checkbox" class="chk-add-course" value="${code}" data-title="${title}" data-units="${units}" ${isSpec} />`;
+        }
+      }
+    }
+
+    // Specialization must be taken strictly in order: ISS181-01 -> ISS181-02 -> ISS181-03 -> ISS181-04
+    function syncSpecializationSequence() {
+      const tbody = document.getElementById("selectionSummaryBody");
+      const loadedCodes = Array.from(tbody.querySelectorAll("tr[data-code]")).map(r => r.getAttribute("data-code"));
+
+      const is02Loaded = loadedCodes.includes("ISS181-02");
+      const is03Loaded = loadedCodes.includes("ISS181-03");
+
+      const row02 = document.querySelector('tr[data-curr-code="ISS181-02"] .add-slot');
+      const row03 = document.querySelector('tr[data-curr-code="ISS181-03"] .add-slot');
+      const row04 = document.querySelector('tr[data-curr-code="ISS181-04"] .add-slot');
+
+      // ISS181-02 can be taken since ISS181-01 is completed (Taken)
+      if (row02 && !is02Loaded) {
+        row02.innerHTML = `<input type="checkbox" class="chk-add-course" value="ISS181-02" data-title="ENTERPRISE DATA MANAGEMENT 2" data-units="3" data-is-spec="true" />`;
+      }
+
+      // ISS181-03 only allowed if ISS181-02 is currently loaded
+      if (row03 && !is03Loaded) {
+        if (is02Loaded) {
+          row03.innerHTML = `<input type="checkbox" class="chk-add-course" value="ISS181-03" data-title="ENTERPRISE DATA MANAGEMENT 3" data-units="3" data-is-spec="true" />`;
+        } else {
+          row03.innerHTML = '';
+        }
+      }
+
+      // ISS181-04 only allowed if ISS181-03 is currently loaded
+      if (row04) {
+        if (is03Loaded && !loadedCodes.includes("ISS181-04")) {
+          row04.innerHTML = `<input type="checkbox" class="chk-add-course" value="ISS181-04" data-title="ENTERPRISE DATA MANAGEMENT 4" data-units="3" data-is-spec="true" />`;
+        } else {
+          row04.innerHTML = '';
+        }
+      }
+    }
+
+    // Restore the shared enrollment before syncing curriculum controls.
+    renderSelectionSummary();
+    syncSpecializationSequence();
+    recalculateLoad();
+  </script>
+</body>
+</html>

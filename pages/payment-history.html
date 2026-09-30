@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myMAPÚA - Payment History</title>
+  <link rel="stylesheet" href="../css/portal-theme.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Tahoma, Helvetica, sans-serif;
+      background: #ffffff;
+      font-size: 12px;
+    }
+
+    .billing-page {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 18px 20px 30px;
+    }
+
+    .billing-content {
+      width: min(100%, 960px);
+    }
+
+    .billing-title {
+      margin: 0 0 20px;
+      padding: 5px 8px;
+      background: #f7faeb;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .history-table-wrap {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .history-table {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: collapse;
+      table-layout: fixed;
+      text-align: center;
+    }
+
+    .history-table th,
+    .history-table td {
+      padding: 6px 8px;
+      border: 1px solid #ffffff;
+    }
+
+    .history-table th {
+      border-color: #8e9b70;
+      background: #cdd0a0;
+      font-weight: normal;
+    }
+
+    .history-table tbody tr {
+      background: #e9ebf1;
+    }
+
+    .history-table tfoot td {
+      border-top: 2px solid #222222;
+      background: #e9ebf1;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .history-table th:nth-child(1) { width: 10%; }
+    .history-table th:nth-child(2) { width: 37%; }
+    .history-table th:nth-child(3) { width: 18%; }
+    .history-table th:nth-child(4) { width: 18%; }
+    .history-table th:nth-child(5) { width: 17%; }
+
+    .history-empty {
+      padding: 18px !important;
+      color: #555555;
+    }
+
+    @media (max-width: 700px) {
+      .billing-page {
+        padding: 14px 12px 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-banner">
+    <div class="banner-inner">
+      <div class="logo-box">
+        <img src="../assets/mapua-logo-portal.png" alt="Mapúa Builder" class="builder-graphic"
+          onerror="this.style.display='none'; document.getElementById('builder-fallback').style.display='flex';" />
+        <div id="builder-fallback" class="builder-fallback-slot">Logo</div>
+      </div>
+    </div>
+    <div class="gold-line"></div>
+  </header>
+
+  <div class="app-layout billing-layout">
+    <aside class="sidebar-nav billing-sidebar" id="billingSidebar"></aside>
+    <nav class="billing-mobile-nav" id="billingMobileNav" aria-label="Enrollment navigation"></nav>
+    <main class="page-content billing-page">
+      <div class="billing-content">
+        <h1 class="billing-title">Payment History</h1>
+        <div class="history-table-wrap">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>SY-Term</th>
+                <th>Description</th>
+                <th>Payment Date</th>
+                <th>OR Number</th>
+                <th>Amount (Php)</th>
+              </tr>
+            </thead>
+            <tbody id="paidHistoryRows"></tbody>
+            <tfoot>
+              <tr><td colspan="5">Total: Php <span id="paidHistoryTotal">0.00</span></td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="bottom-footer">
+    Copyright &copy; 2001-2026. All rights reserved. Mapúa University<br />
+    <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a><br />
+    <span>helpdesk@mapua.edu.ph</span>
+  </footer>
+
+  <script src="../js/enrollment-state.js"></script>
+  <script src="../js/payment-flow.js"></script>
+  <script>
+    window.myMapuaPaymentFlow.renderNavigation('history');
+    const rows = document.getElementById('paidHistoryRows');
+    const payments = window.myMapuaEnrollment.getPaidPayments();
+    const total = payments.reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
+
+    function formatAmount(amount) {
+      return Number(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    payments.forEach(payment => {
+      const row = document.createElement('tr');
+      const installmentLabel = payment.installmentCount > 1
+        ? ` - Payment ${payment.installmentNumber} of ${payment.installmentCount}`
+        : '';
+      const values = [
+        payment.schoolTerm || '2026-1',
+        `${payment.description || 'MATRICULATION FEE'}${installmentLabel}`,
+        new Date(payment.paidAt).toLocaleDateString('en-US'),
+        payment.transactionNumber || '',
+        formatAmount(payment.amount)
+      ];
+      values.forEach(value => {
+        const cell = document.createElement('td');
+        cell.textContent = value;
+        row.appendChild(cell);
+      });
+      rows.appendChild(row);
+    });
+
+    if (payments.length === 0) {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = 5;
+      cell.className = 'history-empty';
+      cell.textContent = 'No paid transactions have been recorded.';
+      row.appendChild(cell);
+      rows.appendChild(row);
+    }
+
+    document.getElementById('paidHistoryTotal').textContent = formatAmount(total);
+  </script>
+</body>
+</html>

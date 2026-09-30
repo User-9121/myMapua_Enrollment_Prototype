@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myMAPÚA - Statement of Account</title>
+  <link rel="stylesheet" href="../css/portal-theme.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Tahoma, Helvetica, sans-serif;
+      background: #ffffff;
+    }
+
+    .statement-page {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 18px 20px 30px;
+      font-size: 12px;
+    }
+
+    .statement-content {
+      width: min(100%, 920px);
+    }
+
+    .statement-title {
+      margin: 0 0 20px 8px;
+      color: #d52b20;
+      font-size: 21px;
+    }
+
+    .statement-table-wrap {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .statement-table {
+      width: 100%;
+      min-width: 700px;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 12px;
+    }
+
+    .statement-table th {
+      padding: 9px 7px;
+      border: 1px solid #d7d7d7;
+      background: #c52117;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    .statement-table td {
+      padding: 8px 7px;
+      border: 1px solid #d7d7d7;
+      background: #f0f0f0;
+      vertical-align: middle;
+    }
+
+    .statement-table tbody tr:nth-child(even) td {
+      background: #e6e7eb;
+    }
+
+    .statement-table th:nth-child(1) { width: 14%; }
+    .statement-table th:nth-child(2) { width: 28%; }
+    .statement-table th:nth-child(3) { width: 15%; }
+    .statement-table th:nth-child(4) { width: 14%; }
+    .statement-table th:nth-child(5) { width: 14%; }
+    .statement-table th:nth-child(6) { width: 15%; }
+
+    .statement-table .amount-cell,
+    .statement-table .select-cell {
+      text-align: center;
+    }
+
+    .statement-table tfoot td {
+      background: #d2d2d2;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .statement-table tfoot td:last-child {
+      text-align: center;
+    }
+
+    .select-all-button {
+      padding: 3px 7px;
+      border: 1px solid #999999;
+      border-radius: 2px;
+      background: #f6f6f6;
+      color: #111111;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .payable-total {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      width: min(565px, 100%);
+      margin: 6px 0 58px;
+      color: #e32929;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .payable-value {
+      min-width: 132px;
+      padding: 2px 10px 4px;
+      border-bottom: 1px solid #f04b4b;
+      color: #111111;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    .method-prompt {
+      width: min(825px, 100%);
+      margin: 0 0 28px;
+      text-align: center;
+    }
+
+    .payment-method-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(190px, 248px));
+      gap: 16px 40px;
+      width: min(825px, 100%);
+      align-items: start;
+    }
+
+    .payment-method-group h2 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .provider-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 103px;
+      margin-bottom: 13px;
+      padding: 12px;
+      border: 1px solid #eeeeee;
+      border-radius: 4px;
+      background: #ffffff;
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.12);
+      color: #101010;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .provider-card:hover:not(:disabled) {
+      border-color: #9aacc7;
+      box-shadow: 0 4px 9px rgba(0, 0, 0, 0.17);
+    }
+
+    .provider-card:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .provider-mark {
+      display: block;
+      margin-bottom: 9px;
+      color: #3159a2;
+      font-size: 25px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .provider-mark.rcbc { color: #4785c6; font-size: 20px; }
+    .provider-mark.landbank { color: #47a748; font-size: 19px; font-style: italic; }
+    .provider-mark.cebuana { color: #173e5b; font-family: Georgia, serif; font-size: 22px; }
+    .provider-mark.gcash { color: #0875dd; }
+    .provider-mark.bukas { color: #3159a2; font-size: 27px; }
+
+    .provider-name {
+      color: #172d8a;
+      font-size: 11px;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .statement-empty {
+      padding: 16px !important;
+      color: #555555;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .app-layout {
+        display: block;
+      }
+
+      .sidebar-nav {
+        display: none;
+      }
+
+      .billing-mobile-nav {
+        display: flex;
+      }
+
+      .statement-page {
+        padding: 14px 12px 26px;
+      }
+
+      .statement-title {
+        margin-left: 0;
+        font-size: 19px;
+      }
+
+      .payment-method-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .payment-method-group {
+        width: min(100%, 300px);
+      }
+
+      .payable-total,
+      .method-prompt {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-banner">
+    <div class="banner-inner">
+      <div class="logo-box">
+        <img src="../assets/mapua-logo-portal.png" alt="Mapúa Builder" class="builder-graphic"
+          onerror="this.style.display='none'; document.getElementById('builder-fallback').style.display='flex';" />
+        <div id="builder-fallback" class="builder-fallback-slot">Logo</div>
+      </div>
+    </div>
+    <div class="gold-line"></div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar-nav" id="billingSidebar"></aside>
+    <nav class="billing-mobile-nav" id="billingMobileNav" aria-label="Enrollment navigation"></nav>
+    <main class="page-content statement-page">
+      <div class="statement-content">
+        <h1 class="statement-title">My Statement of Account</h1>
+        <div class="statement-table-wrap">
+          <table class="statement-table">
+            <thead>
+              <tr>
+                <th>SY-Term</th>
+                <th>Description</th>
+                <th>Date Charged</th>
+                <th>Ref. #</th>
+                <th>Amount</th>
+                <th>Select</th>
+              </tr>
+            </thead>
+            <tbody id="statementRows"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4">Total:</td>
+                <td id="statementTableTotal">0.00</td>
+                <td><button type="button" class="select-all-button" id="selectAllButton">Select All</button></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="payable-total">
+          <span>Total Amount Payable:</span>
+          <span class="payable-value" id="payableAmount">0.00</span>
+        </div>
+
+        <p class="method-prompt">Please select your preferred method of payment:</p>
+        <div class="payment-method-grid">
+          <section class="payment-method-group">
+            <h2>Online Payment</h2>
+            <button type="button" class="provider-card" data-method="online">
+              <span class="provider-mark rcbc">RCBC Bankard &nbsp; VISA</span>
+              <span class="provider-name">RCBC Online Payment</span>
+            </button>
+            <button type="button" class="provider-card" data-method="online">
+              <span class="provider-mark landbank">LANDBANK ePaymentPortal</span>
+              <span class="provider-name">LandBank Online Payment</span>
+            </button>
+          </section>
+          <section class="payment-method-group">
+            <h2>Pay-in-Person</h2>
+            <button type="button" class="provider-card" data-method="in-person">
+              <span class="provider-mark rcbc">RCBC</span>
+              <span class="provider-name">RCBC Bank</span>
+            </button>
+            <button type="button" class="provider-card" data-method="in-person">
+              <span class="provider-mark cebuana">CEBUANA Lhuillier</span>
+              <span class="provider-name">Cebuana Lhuillier</span>
+            </button>
+            <button type="button" class="provider-card" data-method="in-person">
+              <span class="provider-mark gcash">GCash</span>
+              <span class="provider-name">GCash</span>
+            </button>
+          </section>
+          <section class="payment-method-group">
+            <h2>Financial Aid</h2>
+            <button type="button" class="provider-card" data-method="aid">
+              <span class="provider-mark bukas">▲ Bukas</span>
+              <span class="provider-name">Bukas Installment Payment</span>
+            </button>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="bottom-footer">
+    Copyright &copy; 2001-2026. All rights reserved. Mapúa University<br />
+    <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a><br />
+    <span>helpdesk@mapua.edu.ph</span>
+  </footer>
+
+  <script src="../js/enrollment-state.js"></script>
+  <script src="../js/payment-flow.js"></script>
+  <script>
+    window.myMapuaPaymentFlow.renderNavigation('statement');
+    const enrollment = window.myMapuaEnrollment;
+    const billing = enrollment.getBilling();
+    const rows = document.getElementById('statementRows');
+    const currentInstallment = billing && Array.isArray(billing.schedule)
+      ? billing.schedule[Number(billing.paidInstallments || 0)]
+      : null;
+    const isPayable = Boolean(billing && billing.status === 'pending' && currentInstallment);
+    const amountDue = isPayable ? Number(currentInstallment.amount) : 0;
+    const referenceNumber = billing ? billing.referenceNumber : '';
+
+    function formatAmount(amount) {
+      return Number(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    if (isPayable) {
+      const row = document.createElement('tr');
+      const values = [
+        billing.schoolTerm || '2026-1',
+        billing.description || 'MATRICULATION FEE',
+        new Date(billing.createdAt || Date.now()).toLocaleDateString('en-US'),
+        referenceNumber,
+        formatAmount(amountDue)
+      ];
+      values.forEach((value, index) => {
+        const cell = document.createElement('td');
+        cell.textContent = value;
+        if (index === 4) cell.className = 'amount-cell';
+        row.appendChild(cell);
+      });
+      const selectCell = document.createElement('td');
+      selectCell.className = 'select-cell';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = true;
+      checkbox.className = 'statement-select';
+      checkbox.setAttribute('aria-label', 'Select current enrollment balance');
+      selectCell.appendChild(checkbox);
+      row.appendChild(selectCell);
+      rows.appendChild(row);
+    } else {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = 6;
+      cell.className = 'statement-empty';
+      cell.textContent = billing && billing.status === 'paid'
+        ? 'Your enrollment balance has been paid.'
+        : 'No finalized enrollment balance is available.';
+      row.appendChild(cell);
+      rows.appendChild(row);
+    }
+
+    document.getElementById('statementTableTotal').textContent = formatAmount(amountDue);
+    document.getElementById('payableAmount').textContent = formatAmount(amountDue);
+    document.querySelectorAll('.provider-card').forEach(button => {
+      button.disabled = !isPayable;
+      button.addEventListener('click', () => {
+        if (!isPayable) return;
+        const selected = Array.from(document.querySelectorAll('.statement-select:checked'));
+        if (selected.length === 0) {
+          enrollment.showNotice('Payment was not started. Select the enrollment charge first.', 'error');
+          return;
+        }
+
+        const method = button.dataset.method;
+        if (method === 'in-person') {
+          window.location.href = 'payment-result.html?method=in-person';
+          return;
+        }
+
+        const result = enrollment.markBillingPaid(method);
+        if (!result.ok) {
+          enrollment.showNotice(`Payment failed: ${result.reason}`, 'error');
+          return;
+        }
+        window.location.href = `payment-result.html?method=${encodeURIComponent(method)}&transaction=${encodeURIComponent(result.payment.transactionNumber)}`;
+      });
+    });
+
+    document.getElementById('selectAllButton').addEventListener('click', () => {
+      const checkboxes = document.querySelectorAll('.statement-select');
+      const selectAll = Array.from(checkboxes).some(checkbox => !checkbox.checked);
+      checkboxes.forEach(checkbox => { checkbox.checked = selectAll; });
+    });
+  </script>
+</body>
+</html>

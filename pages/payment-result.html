@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myMAPÚA - My Payment</title>
+  <link rel="stylesheet" href="../css/portal-theme.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Tahoma, Helvetica, sans-serif;
+      background: #ffffff;
+      font-size: 12px;
+    }
+
+    .billing-page {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 18px 20px 30px;
+    }
+
+    .billing-content {
+      width: min(100%, 900px);
+    }
+
+    .billing-title {
+      margin: 0 0 18px;
+      padding: 5px 8px;
+      background: #f7faeb;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .result-panel {
+      width: min(100%, 780px);
+      margin: 18px auto 0;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .result-panel p {
+      margin: 12px 0;
+    }
+
+    .result-panel strong {
+      font-size: 15px;
+    }
+
+    .result-button {
+      margin-top: 2px;
+      padding: 4px 9px;
+      border: 1px solid #888888;
+      border-radius: 2px;
+      background: #f5f5f5;
+      color: #111111;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .guidelines-content {
+      width: min(100%, 790px);
+      margin: 20px auto 0;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .guidelines-content h2 {
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .guidelines-content ul {
+      margin: 0 0 16px 18px;
+      padding: 0;
+    }
+
+    .guidelines-content li {
+      margin: 2px 0;
+    }
+
+    .guidelines-content p {
+      margin: 12px 0;
+    }
+
+    .guideline-highlight {
+      color: #1b3a87;
+      font-weight: bold;
+    }
+
+    @media (max-width: 700px) {
+      .billing-page {
+        padding: 14px 12px 26px;
+      }
+
+      .result-panel,
+      .guidelines-content {
+        margin-top: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-banner">
+    <div class="banner-inner">
+      <div class="logo-box">
+        <img src="../assets/mapua-logo-portal.png" alt="Mapúa Builder" class="builder-graphic"
+          onerror="this.style.display='none'; document.getElementById('builder-fallback').style.display='flex';" />
+        <div id="builder-fallback" class="builder-fallback-slot">Logo</div>
+      </div>
+    </div>
+    <div class="gold-line"></div>
+  </header>
+
+  <div class="app-layout billing-layout">
+    <aside class="sidebar-nav billing-sidebar" id="billingSidebar"></aside>
+    <nav class="billing-mobile-nav" id="billingMobileNav" aria-label="Enrollment navigation"></nav>
+    <main class="page-content billing-page">
+      <div class="billing-content">
+        <h1 class="billing-title" id="resultPageTitle">My Payment</h1>
+        <section class="result-panel" id="transactionResult" hidden>
+          <p><strong id="transactionStatus">Transaction successful.</strong></p>
+          <p id="transactionNumberText"></p>
+          <p>Thank you.</p>
+          <button type="button" class="result-button" id="goBackButton">Go Back</button>
+        </section>
+        <section class="guidelines-content" id="inPersonGuidelines" hidden>
+          <h2>General Guidelines:</h2>
+          <ul>
+            <li>Only use the reference number below for the Pay-In-Person transaction.</li>
+            <li>Confirmation is processed two (2) business days after the payment date.</li>
+            <li>A confirmation email will be sent after the payment is processed.</li>
+            <li>Payments less than the exact amount indicated will not be processed.</li>
+            <li>To change your payment method or selected items, go back to the previous page.</li>
+          </ul>
+          <p>Please pay the exact amount of <strong id="guidelineAmount"></strong>.</p>
+          <p>Your reference number is <strong id="guidelineReference"></strong>.</p>
+          <p>Note: For the GCash app use <span class="guideline-highlight" id="gcashReference"></span>.</p>
+          <p>Thank you.</p>
+          <button type="button" class="result-button" id="guidelinesBackButton">GO BACK TO PREVIOUS PAGE</button>
+        </section>
+        <section class="result-panel" id="paymentError" hidden>
+          <p><strong>Transaction could not be completed.</strong></p>
+          <p id="paymentErrorText"></p>
+          <button type="button" class="result-button" id="errorBackButton">Go Back</button>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <footer class="bottom-footer">
+    Copyright &copy; 2001-2026. All rights reserved. Mapúa University<br />
+    <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a><br />
+    <span>helpdesk@mapua.edu.ph</span>
+  </footer>
+
+  <script src="../js/enrollment-state.js"></script>
+  <script src="../js/payment-flow.js"></script>
+  <script>
+    window.myMapuaPaymentFlow.renderNavigation('statement');
+    const enrollment = window.myMapuaEnrollment;
+    const params = new URLSearchParams(window.location.search);
+    const method = params.get('method') || 'online';
+    const billing = enrollment.getBilling();
+  const statementUrl = 'statement-of-account.html';
+
+    function formatAmount(amount) {
+      return Number(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function returnToStatement() {
+      window.location.href = statementUrl;
+    }
+
+    if (method === 'in-person') {
+      const currentInstallment = billing && Array.isArray(billing.schedule)
+        ? billing.schedule[Number(billing.paidInstallments || 0)]
+        : null;
+      document.getElementById('inPersonGuidelines').hidden = false;
+      document.getElementById('guidelineAmount').textContent = `PHP ${formatAmount(currentInstallment ? currentInstallment.amount : 0)}`;
+      document.getElementById('guidelineReference').textContent = billing ? billing.referenceNumber : 'Unavailable';
+      document.getElementById('gcashReference').textContent = billing ? `MU${billing.referenceNumber}` : 'Unavailable';
+      document.getElementById('guidelinesBackButton').addEventListener('click', returnToStatement);
+    } else {
+      const transactionNumber = params.get('transaction');
+      const transaction = enrollment.getPaidPayments().find(payment => payment.transactionNumber === transactionNumber);
+      if (transaction) {
+        document.getElementById('transactionResult').hidden = false;
+        document.getElementById('transactionNumberText').textContent = `Please take note of your transaction number ${transaction.transactionNumber}.`;
+        document.getElementById('goBackButton').addEventListener('click', returnToStatement);
+      } else {
+        document.getElementById('paymentError').hidden = false;
+        document.getElementById('paymentErrorText').textContent = 'The payment record could not be found in this browser session.';
+        document.getElementById('errorBackButton').addEventListener('click', returnToStatement);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myMAPÚA - Home</title>
+  <link rel="stylesheet" href="../css/portal-theme.css" />
+</head>
+<body>
+
+<!-- Top Header Banner -->
+<header class="top-banner">
+  <div class="banner-inner">
+    <!-- Builder Logo: Bottom overlaps the gold stripe -->
+    <div class="logo-box">
+      <img 
+        src="../assets/mapua-logo-portal.png    " 
+        alt="Mapúa Builder" 
+        class="builder-graphic" 
+        onerror="this.style.display='none'; document.getElementById('builder-fallback').style.display='flex';" 
+      />
+      <div id="builder-fallback" class="builder-fallback-slot">Logo</div>
+    </div>
+
+
+      </span>
+    </div>
+  </div>
+
+  <!-- Gold Stripe -->
+  <div class="gold-line"></div>
+</header>
+
+  <!-- Shell Wrapper (Strict Flex: Sidebar Left, Content Right) -->
+  <div class="app-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar-nav">
+  <ul class="nav-root">
+    
+    <!-- My Home (Active) -->
+    <li class="nav-entry active-home">
+      <a href="home.html">
+        <svg class="nav-icon-svg" viewBox="0 0 16 16">
+          <path d="M8 1.5 L1 8 L3 8 L3 14 L7 14 L7 10 L9 10 L9 14 L13 14 L13 8 L15 8 Z" fill="#c68a4c" stroke="#5c3b1e" stroke-width="0.8" />
+          <polygon points="8,1 15.5,7.5 14,8.5 8,3 2,8.5 0.5,7.5" fill="#c63d2b" />
+          <rect x="9.5" y="5.5" width="2" height="2" fill="#5dade2" />
+        </svg>
+        <span class="label">My Home</span>
+      </a>
+    </li>
+
+    <!-- Profile Category -->
+    <li class="nav-group">
+      <div class="group-header" onclick="toggleSection('grp-profile', this)">
+        <svg class="nav-icon-svg" viewBox="0 0 16 16">
+          <rect x="1" y="2" width="14" height="11" rx="1" fill="#e8edf2" stroke="#4a6572" stroke-width="1" />
+          <rect x="2.5" y="4" width="4" height="4.5" fill="#3498db" />
+          <line x1="8" y1="4.5" x2="13" y2="4.5" stroke="#333" stroke-width="1" />
+          <line x1="8" y1="7" x2="13" y2="7" stroke="#333" stroke-width="1" />
+          <line x1="3" y1="10.5" x2="13" y2="10.5" stroke="#888" stroke-width="1" />
+        </svg>
+        <span class="label">Profile</span>
+        <span class="expander plus">+</span>
+      </div>
+      <ul class="sub-menu is-hidden" id="grp-profile">
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="1.5" y="2" width="13" height="10" rx="1" fill="#f4f6f7" stroke="#5d6d7e" stroke-width="0.9"/>
+              <circle cx="5" cy="5.5" r="2" fill="#e74c3c"/>
+              <circle cx="12" cy="11" r="3.5" fill="#2ecc71"/>
+              <path d="M12 9 V13 M10 11 H14" stroke="#fff" stroke-width="1.2"/>
+            </svg>
+            My Contact Info
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="1.5" width="12" height="13" fill="#fff" stroke="#34495e" stroke-width="1"/>
+              <rect x="2" y="1.5" width="12" height="3" fill="#95a5a6"/>
+              <line x1="2" y1="7.5" x2="14" y2="7.5" stroke="#bdc3c7" stroke-width="0.8"/>
+              <line x1="2" y1="10.5" x2="14" y2="10.5" stroke="#bdc3c7" stroke-width="0.8"/>
+              <line x1="6.5" y1="4.5" x2="6.5" y2="14.5" stroke="#bdc3c7" stroke-width="0.8"/>
+            </svg>
+            My Personal Data
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="1" width="10" height="13" fill="#fffae6" stroke="#b7950b" stroke-width="1"/>
+              <text x="3" y="7" font-size="5" font-weight="bold" fill="#900">1.00</text>
+              <polygon points="8,14 14,8 15,9 9,15" fill="#f39c12"/>
+              <polygon points="7,15 8,14 9,15" fill="#2c3e50"/>
+            </svg>
+            My Grades
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="1.5" y="3" width="13" height="11" rx="1" fill="#fff" stroke="#566573" stroke-width="1"/>
+              <rect x="1.5" y="3" width="13" height="3.5" fill="#e74c3c"/>
+              <circle cx="5" cy="9" r="1" fill="#3498db"/>
+              <circle cx="8" cy="9" r="1" fill="#3498db"/>
+              <circle cx="11" cy="9" r="1" fill="#3498db"/>
+              <circle cx="5" cy="12" r="1" fill="#3498db"/>
+              <circle cx="8" cy="12" r="1" fill="#3498db"/>
+            </svg>
+            My Schedule
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <path d="M2 3 Q8 4 8 13 Q4 12 2 12 Z" fill="#ebf5fb" stroke="#2980b9" stroke-width="0.9"/>
+              <path d="M14 3 Q8 4 8 13 Q12 12 14 12 Z" fill="#ebf5fb" stroke="#2980b9" stroke-width="0.9"/>
+              <polygon points="11,1 15,5 14,6 10,2" fill="#f1c40f"/>
+            </svg>
+            My Curriculum
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="1.5" y="3" width="13" height="9.5" rx="1" fill="#eaeded" stroke="#7f8c8d" stroke-width="1"/>
+              <polyline points="2,4 8,8.5 14,4" fill="none" stroke="#2980b9" stroke-width="1.2"/>
+            </svg>
+            My Office 365
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <circle cx="6" cy="6" r="3.5" fill="none" stroke="#d4ac0d" stroke-width="2"/>
+              <path d="M9 7.5 L14 12.5 L12.5 14 L11.5 13 L11.5 11.5 L9.5 11.5" stroke="#b7950b" stroke-width="1.8" fill="none"/>
+            </svg>
+            Reset My Password
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="1" width="10" height="13" fill="#fff" stroke="#7f8c8d" stroke-width="1"/>
+              <line x1="4" y1="4" x2="9" y2="4" stroke="#95a5a6" stroke-width="1"/>
+              <line x1="4" y1="7" x2="9" y2="7" stroke="#95a5a6" stroke-width="1"/>
+              <circle cx="11.5" cy="11.5" r="3" fill="#3498db"/>
+              <path d="M11.5 10 V13 M10 11.5 H13" stroke="#fff" stroke-width="0.8"/>
+            </svg>
+            Reset Info Update
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Enrollment Group -->
+    <li class="nav-group">
+      <div class="group-header" onclick="toggleSection('grp-enrollment', this)">
+        <svg class="nav-icon-svg" viewBox="0 0 16 16">
+          <rect x="2" y="1" width="11" height="13.5" fill="#fdfefe" stroke="#5d6d7e" stroke-width="1"/>
+          <path d="M4 4 H10 M4 7 H10 M4 10 H8" stroke="#34495e" stroke-width="1"/>
+        </svg>
+        <span class="label">Enrollment</span>
+        <span class="expander plus">+</span>
+      </div>
+      <ul class="sub-menu is-hidden" id="grp-enrollment">
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="1" width="11" height="13.5" fill="#fff" stroke="#7f8c8d" stroke-width="0.8"/>
+              <rect x="3.5" y="4" width="8" height="6.5" fill="#e74c3c"/>
+              <text x="4.5" y="8.8" font-size="4" font-weight="bold" fill="#fff">PDF</text>
+            </svg>
+            Online Enrollment User Manual
+          </a>
+        </li>
+        <li>
+<a href="manage-course.html">
+  <svg class="nav-icon-svg" viewBox="0 0 16 16">
+    <polygon points="8,1 15,4 8,7 1,4" fill="#f5b041" stroke="#b9770e" stroke-width="0.8"/>
+    <polygon points="1,4 8,7 8,14 1,11" fill="#d68910" stroke="#b9770e" stroke-width="0.8"/>
+    <polygon points="15,4 8,7 8,14 15,11" fill="#f8c471" stroke="#b9770e" stroke-width="0.8"/>
+  </svg>
+  <span>Manage Course</span>
+</a>
+        </li>
+        <li>
+          <a href="manage-section.html">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="1" y="2" width="14" height="11" fill="#fff" stroke="#2980b9" stroke-width="1"/>
+              <rect x="1" y="2" width="14" height="3" fill="#3498db"/>
+              <line x1="5.5" y1="2" x2="5.5" y2="13" stroke="#2980b9" stroke-width="0.8"/>
+              <line x1="10.5" y1="2" x2="10.5" y2="13" stroke="#2980b9" stroke-width="0.8"/>
+            </svg>
+            <span>Manage Section</span>
+          </a>
+        </li>
+        <li>
+          <a href="payments.html">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="2" width="12" height="12" rx="1.5" fill="#e8f8f5" stroke="#1abc9c" stroke-width="1"/>
+              <polyline points="4,8 7,11 12,4" fill="none" stroke="#16a085" stroke-width="1.8"/>
+            </svg>
+            <span>Finalization</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="1" width="11" height="13.5" fill="#fff" stroke="#7f8c8d" stroke-width="0.8"/>
+              <rect x="3.5" y="4" width="8" height="6.5" fill="#e74c3c"/>
+              <text x="4.5" y="8.8" font-size="4" font-weight="bold" fill="#fff">PDF</text>
+            </svg>
+            Course Request Forms
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Bills & Payments -->
+    <li class="nav-group">
+      <div class="group-header" onclick="toggleSection('grp-bills', this)">
+        <svg class="nav-icon-svg" viewBox="0 0 16 16">
+          <rect x="2" y="4" width="12" height="8" rx="1" fill="#f9e79f" stroke="#b7950b" stroke-width="1"/>
+          <circle cx="8" cy="8" r="2" fill="#f1c40f" stroke="#b7950b" stroke-width="0.8"/>
+        </svg>
+        <span class="label">Bills &amp; Payments</span>
+        <span class="expander plus">+</span>
+      </div>
+      <ul class="sub-menu is-hidden" id="grp-bills">
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <polygon points="8,1 2,5 14,5" fill="#5dade2"/>
+              <rect x="3" y="6" width="2" height="6" fill="#2e86c1"/>
+              <rect x="7" y="6" width="2" height="6" fill="#2e86c1"/>
+              <rect x="11" y="6" width="2" height="6" fill="#2e86c1"/>
+              <rect x="1.5" y="12" width="13" height="2" fill="#1b4f72"/>
+            </svg>
+            Guidelines for Bukas Installment Plan
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="1.5" width="11" height="13" fill="#fff" stroke="#7f8c8d" stroke-width="1"/>
+              <line x1="4" y1="4.5" x2="10" y2="4.5" stroke="#333" stroke-width="1"/>
+              <line x1="4" y1="7" x2="10" y2="7" stroke="#333" stroke-width="1"/>
+              <line x1="4" y1="9.5" x2="10" y2="9.5" stroke="#333" stroke-width="1"/>
+            </svg>
+            Statement of account
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <circle cx="7" cy="8" r="5" fill="#fdfefe" stroke="#34495e" stroke-width="1"/>
+              <polyline points="7,5 7,8 9.5,8" stroke="#e74c3c" stroke-width="1" fill="none"/>
+              <circle cx="12" cy="11.5" r="2.5" fill="#f39c12"/>
+            </svg>
+            Payment History
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Services -->
+    <li class="nav-group">
+      <div class="group-header" onclick="toggleSection('grp-services', this)">
+        <svg class="nav-icon-svg" viewBox="0 0 16 16">
+          <circle cx="8" cy="8" r="3.5" fill="#bdc3c7" stroke="#34495e" stroke-width="1"/>
+          <path d="M8,1 L8,4 M8,12 L8,15 M1,8 L4,8 M12,8 L15,8" stroke="#34495e" stroke-width="1.8"/>
+        </svg>
+        <span class="label">Services</span>
+        <span class="expander plus">+</span>
+      </div>
+      <ul class="sub-menu is-hidden" id="grp-services">
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="2" y="1" width="11" height="13.5" fill="#fff" stroke="#7f8c8d" stroke-width="0.8"/>
+              <rect x="3.5" y="4" width="8" height="6.5" fill="#e74c3c"/>
+              <text x="4.5" y="8.8" font-size="4" font-weight="bold" fill="#fff">PDF</text>
+            </svg>
+            Academic Documents
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <path d="M8 2 V10 M5 7 L8 10 L11 7" stroke="#27ae60" stroke-width="1.8" fill="none"/>
+              <rect x="2" y="12" width="12" height="2" fill="#229954"/>
+            </svg>
+            Downloadable Forms
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Concern/Feedback -->
+    <li class="nav-group">
+      <div class="group-header" onclick="toggleSection('grp-feedback', this)">
+        <svg class="nav-icon-svg" viewBox="0 0 16 16">
+          <path d="M2 3 Q2 1 4 1 H12 Q14 1 14 3 V9 Q14 11 12 11 H5 L2 14 Z" fill="#fcf3cf" stroke="#f39c12" stroke-width="1"/>
+        </svg>
+        <span class="label">Concern/Feedback</span>
+        <span class="expander plus">+</span>
+      </div>
+      <ul class="sub-menu is-hidden" id="grp-feedback">
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <rect x="1.5" y="4" width="13" height="9" fill="#fef9e7" stroke="#f39c12" stroke-width="1"/>
+              <polyline points="1.5,4 8,9 14.5,4" fill="none" stroke="#d68910" stroke-width="1"/>
+            </svg>
+            Email myCounselor
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg class="nav-icon-svg" viewBox="0 0 16 16">
+              <path d="M2 3 Q2 1 4 1 H12 Q14 1 14 3 V9 Q14 11 12 11 H5 L2 14 Z" fill="#fcf3cf" stroke="#f39c12" stroke-width="1"/>
+            </svg>
+            Service Feedback
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Help -->
+    <li class="nav-entry">
+      <a href="#">
+        <svg class="nav-icon-svg" viewBox="0 0 16 16">
+          <circle cx="8" cy="8" r="6.5" fill="#f9e79f" stroke="#d4ac0d" stroke-width="1"/>
+          <text x="6" y="11" font-size="8" font-weight="bold" fill="#7d6608">?</text>
+        </svg>
+        <span class="label">Help</span>
+      </a>
+    </li>
+
+    <!-- Sign Out -->
+    <li class="nav-entry">
+      <a href="login.html" data-signout>
+        <svg class="nav-icon-svg" viewBox="0 0 16 16">
+          <rect x="1" y="2" width="6" height="12" fill="#566573"/>
+          <path d="M7 2 L14 4 V12 L7 14 Z" fill="#a0522d" stroke="#5c3b1e" stroke-width="0.8"/>
+          <circle cx="9" cy="8" r="0.8" fill="#f1c40f"/>
+        </svg>
+        <span class="label">Sign Out</span>
+      </a>
+    </li>
+  </ul>
+</aside>
+
+    <!-- Main Content Right Area -->
+    <main class="page-content">
+      <div class="welcome-header">
+        Welcome <strong id="studentGreeting">NEIL GABRIEL M. CHAVEZ</strong>,
+      </div>
+
+      <section class="content-section">
+        <h3 class="section-heading">Announcement</h3>
+        <p class="empty-notice">No announcement available...</p>
+      </section>
+
+      <section class="content-section">
+        <h3 class="section-heading">Payment Concerns</h3>
+        <p class="section-text">
+          If You Are Having Challenges In Paying School Fees, Please Send An Email To 
+          <a href="mailto:treasury@mapua.edu.ph" class="anchor-link">treasury@mapua.edu.ph</a>
+        </p>
+      </section>
+
+      <section class="content-section">
+        <h3 class="section-heading">ATTENTION</h3>
+        <ol class="num-list">
+          <li>Guidlines On How To Access Remotely The Computer In The Computer Laboratory.</li>
+          <li>Students Enrolled In An Online Course Are Not Required To Take A <strong>Faculty Evaluation Survey</strong>.</li>
+        </ol>
+      </section>
+
+      <section class="content-section">
+        <h3 class="section-heading">Remarks</h3>
+        <ol class="num-list">
+          <li>Click here for the <a href="#" class="anchor-link bold">Online Enrollment Tutorial</a>.</li>
+          <li>
+            Before you can proceed to your <strong>online enrollment registration</strong>, you are required to complete the <strong>Student Satisfaction Survey</strong>. 
+            <a href="manage-course.html" class="anchor-link">Click here to answer</a>.
+          </li>
+          <li>
+            You have completed the Intake Interview, Need Analysis Survey and Online Family Profile Survey Forms.<br />
+            You may print/reprint <a href="#" class="anchor-link bold">this</a> to serve as your permit to the Interview with your Guidance Counselor.
+          </li>
+          <li>Click this to take <a href="#" class="anchor-link bold">Intake Interview</a></li>
+          <li>Click this to view <a href="#" class="anchor-link bold">Family Profile</a></li>
+        </ol>
+      </section>
+
+      <section class="content-section">
+        <h3 class="section-heading">2026–2027 CSC Election is now on-going</h3>
+        <p class="section-text">
+          <a href="#" class="anchor-link bold">Click here</a> to participate in the event.
+        </p>
+      </section>
+
+      <div class="admin-notice">
+        <strong>Note:</strong> Still having problems? Send us an email and we will be glad to assist you. 
+        <a href="mailto:helpdesk@mapua.edu.ph" class="anchor-link bold">myMapúa Administrator</a>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Bottom Dark Red Footer -->
+  <footer class="bottom-footer">
+    Copyright &copy; 2001-2026. All rights reserved. Mapúa University<br />
+    <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a><br />
+    <span>helpdesk@mapua.edu.ph</span>
+  </footer>
+
+  <script src="../js/enrollment-state.js"></script>
+  <script src="../js/payment-flow.js"></script>
+  <script>
+    function toggleSection(id, headerEl) {
+      const sub = document.getElementById(id);
+      const expander = headerEl.querySelector('.expander');
+      if (sub.classList.contains('is-hidden')) {
+        sub.classList.remove('is-hidden');
+        expander.textContent = '-';
+        expander.className = 'expander minus';
+      } else {
+        sub.classList.add('is-hidden');
+        expander.textContent = '+';
+        expander.className = 'expander plus';
+      }
+    }
+  </script>
+</body>
+</html>

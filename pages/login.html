@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in to your account - Mapúa University</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", "Helvetica Neue", "Lucida Grande", Roboto, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #111 url('../assets/mapua-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      color: #1b1b1b;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Dim overlay matching Microsoft SSO */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.55); /* Change from 0.28 to 0.55 or higher */
+  z-index: 1;
+}
+
+    .login-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 440px;
+      padding: 16px;
+    }
+
+    /* Main White Sign-In Card */
+    .sign-in-box {
+      background: #ffffff;
+      padding: 40px 40px 36px 40px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+    }
+
+    .org-logo-container {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Black badge container for the black-banner Mapua logo */
+    .org-logo-container img {
+  max-width: 170px;
+  height: auto;
+  display: block;
+  /* Inverts the black background to white and keeps dark text/emblem visible */
+  filter: invert(1) hue-rotate(180deg);
+  mix-blend-mode: multiply;
+}
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1b1b1b;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .form-group {
+      margin-top: 14px;
+      margin-bottom: 14px;
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 7px 0 6px 0;
+      border: none;
+      border-bottom: 1px solid #666666;
+      font-size: 15px;
+      outline: none;
+      background: transparent;
+      color: #1b1b1b;
+      transition: border-bottom 0.15s ease-in-out;
+    }
+
+    .text-input:focus {
+      border-bottom: 2px solid #0067b8;
+    }
+
+    .text-input::placeholder {
+      color: #707070;
+      font-size: 14px;
+    }
+
+    .action-links {
+      margin-top: 10px;
+    }
+
+    .link {
+      font-size: 13px;
+      color: #0067b8;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+      color: #004b87;
+    }
+
+    /* User badge when entering password */
+    .identity-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14.5px;
+      color: #1b1b1b;
+      margin-bottom: 14px;
+    }
+
+    .back-arrow-btn {
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: #222;
+      padding: 2px 6px;
+      border-radius: 50%;
+      line-height: 1;
+    }
+
+    .back-arrow-btn:hover {
+      background: #e5e5e5;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 32px;
+    }
+
+    .btn-submit {
+      background-color: #0067b8;
+      color: #ffffff;
+      border: none;
+      min-width: 108px;
+      height: 32px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 400;
+      text-align: center;
+      transition: background-color 0.1s ease;
+    }
+
+    .btn-submit:hover {
+      background-color: #005da6;
+    }
+
+    /* Key Card: Sign-in Options */
+    .sign-in-options-card {
+      margin-top: 18px;
+      background: #ffffff;
+      padding: 11px 18px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14.5px;
+      cursor: pointer;
+      color: #222;
+    }
+
+    .sign-in-options-card:hover {
+      background: #f7f7f7;
+    }
+
+    .key-icon {
+      font-size: 16px;
+      transform: rotate(-45deg);
+      display: inline-block;
+    }
+
+    /* Bottom right footer terms */
+    .footer-bar {
+      position: absolute;
+      bottom: 12px;
+      right: 24px;
+      z-index: 2;
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+    }
+
+    .footer-bar a {
+      color: #ffffff;
+      text-decoration: none;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+    }
+
+    .footer-bar a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="sign-in-box">
+      <div class="org-logo-container">
+        <!-- Exact Mapua Logo with Builder and Pillar -->
+        <img src="../assets/mapua-logo.png" alt="Mapúa University" id="orgLogo" />
+      </div>
+
+      <!-- Step 1: Email Form -->
+      <div id="emailStep">
+        <h2>Sign in</h2>
+        <form id="emailForm">
+          <div class="form-group">
+            <input 
+              type="text" 
+              id="userEmail" 
+              class="text-input" 
+              placeholder="user@mapua.edu.ph or user@mymail.mapua.edu.ph" 
+              required 
+              autofocus 
+            />
+          </div>
+          <div class="action-links">
+            <a href="#" class="link">Can't access your account?</a>
+          </div>
+          <div class="button-group">
+            <button type="submit" class="btn-submit">Next</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 2: Password Form -->
+      <div id="passwordStep" style="display: none;">
+        <div class="identity-pill">
+          <button type="button" class="back-arrow-btn" id="btnBackToEmail" title="Back">←</button>
+          <span id="userEmailBadge" style="font-weight: 500;"></span>
+        </div>
+        <h2>Enter password</h2>
+        <form id="passwordForm">
+          <div class="form-group">
+            <input 
+              type="password" 
+              id="userPassword" 
+              class="text-input" 
+              placeholder="Password" 
+              required 
+            />
+          </div>
+          <div class="action-links">
+            <a href="#" class="link">Forgot my password</a>
+          </div>
+          <div class="button-group">
+            <button type="submit" class="btn-submit">Sign in</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sign-in Options Bar -->
+    <div class="sign-in-options-card">
+      <span class="key-icon">🔑</span>
+      <span>Sign-in options</span>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <a href="#">Terms of use</a>
+    <a href="#">Privacy &amp; cookies</a>
+    <a href="#">...</a>
+  </div>
+
+  <script>
+    const emailStep = document.getElementById("emailStep");
+    const passwordStep = document.getElementById("passwordStep");
+    const userEmailInput = document.getElementById("userEmail");
+    const userPasswordInput = document.getElementById("userPassword");
+    const userEmailBadge = document.getElementById("userEmailBadge");
+
+    // Email Step -> Password Step
+    document.getElementById("emailForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = userEmailInput.value.trim();
+      if (!email) return;
+
+      userEmailBadge.textContent = email;
+      localStorage.setItem("userEmail", email);
+
+      emailStep.style.display = "none";
+      passwordStep.style.display = "block";
+      userPasswordInput.focus();
+    });
+
+    // Return to Email Step
+    document.getElementById("btnBackToEmail").addEventListener("click", function() {
+      passwordStep.style.display = "none";
+      emailStep.style.display = "block";
+      userEmailInput.focus();
+    });
+
+    // Password Step -> Redirect to Portal Home / Manage Course
+    document.getElementById("passwordForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      window.location.href = "home.html";
+    });
+  </script>
+</body>
+</html>
